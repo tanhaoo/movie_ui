@@ -10,26 +10,23 @@
             <a-tabs
                 :activeKey="customActiveKey"
                 :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-                @change="handleTabClick"
-            >
+                @change="handleTabClick">
                 <a-tab-pane key="tab1" tab="账号密码登录">
                     <a-alert
                         v-if="isLoginError"
                         type="error"
                         showIcon
                         style="margin-bottom: 24px;"
-                        message="账户或密码错误（admin/ant.design )"
+                        message="账户名或密码错误"
                     />
                     <a-form-item>
                         <a-input
                             size="large"
                             type="text"
                             placeholder="账户: admin"
-                            v-decorator="[
-                'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
-              ]"
-                        >
+                            v-decorator="['username',{rules: [{ required: true, message: '请输入账户名' },
+                            { validator: handleUsernameOrEmail }],
+                            validateTrigger: 'change'}]">
                             <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                         </a-input>
                     </a-form-item>
@@ -39,12 +36,8 @@
                             size="large"
                             type="password"
                             autocomplete="false"
-                            placeholder="密码: admin or ant.design"
-                            v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
-                        >
+                            placeholder="密码: admin"
+                            v-decorator="['password',{rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}]">
                             <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                         </a-input>
                     </a-form-item>
@@ -55,8 +48,9 @@
                             size="large"
                             type="text"
                             placeholder="手机号"
-                            v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: '请输入正确的手机号' }], validateTrigger: 'change'}]"
-                        >
+                            v-decorator="['mobile',
+                            {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: '请输入正确的手机号' }],
+                            validateTrigger: 'change'}]">
                             <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(255,255,255)' }"/>
                         </a-input>
                     </a-form-item>
@@ -68,8 +62,7 @@
                                     size="large"
                                     type="text"
                                     placeholder="验证码"
-                                    v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]"
-                                >
+                                    v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
                                     <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                                 </a-input>
                             </a-form-item>
@@ -96,7 +89,6 @@
                 >忘记密码
                 </router-link>
             </a-form-item>
-
             <a-form-item style="margin-top:24px">
                 <a-button
                     size="large"
@@ -109,6 +101,14 @@
                 </a-button>
             </a-form-item>
         </a-form>
+        <a-button
+            class="login-button"
+            size="large"
+            type="primary"
+            :loading="state.loginBtn"
+            :disabled="state.loginBtn"
+        >游客登录
+        </a-button>
 
         <two-step-captcha
             v-if="requiredTwoStepCaptcha"
@@ -148,7 +148,8 @@ export default {
                 // login type: 0 email, 1 username, 2 telephone
                 loginType: 0,
                 smsSendBtn: false
-            }
+            },
+            visiteBtn:false
         }
     },
     created() {
@@ -176,7 +177,6 @@ export default {
         },
         handleTabClick(key) {
             this.customActiveKey = key
-            // this.form.resetFields()
         },
         handleSubmit(e) {
             e.preventDefault()
@@ -317,13 +317,6 @@ export default {
         color: #fff;
     }
 
-    button.login-button {
-        padding: 0 15px;
-        font-size: 16px;
-        height: 40px;
-        width: 100%;
-    }
-
     .user-login-other {
         text-align: left;
         margin-top: 24px;
@@ -346,5 +339,11 @@ export default {
             float: right;
         }
     }
+}
+button.login-button {
+    padding: 0 15px;
+    font-size: 16px;
+    height: 40px;
+    width: 100%;
 }
 </style>

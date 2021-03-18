@@ -19,9 +19,9 @@ const app = {
         theme: '',
         layout: '',
         contentWidth: '',
-        fixedHeader: false,
+        fixedHeader: true,
         fixSiderbar: false,
-        autoHideHeader: false,
+        autoHideHeader: true,
         color: null,
         weak: false,
         multiTab: true

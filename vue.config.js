@@ -1,7 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
-const {getThemeVariables} = require('antd/dist/theme');
 
 function resolve(dir) {
     return path.join(__dirname, dir)
@@ -72,32 +71,34 @@ const vueConfig = {
         loaderOptions: {
             less: {
                 modifyVars:
-                    // getThemeVariables({
-                    //     dark: true, // 开启暗黑模式
-                    //     compact: false, // 开启紧凑模式
-                    // }),
-                {
-                // less vars，customize ant design theme
+                // getThemeVariables({
+                //     dark: true, // 开启暗黑模式
+                //     compact: false, // 开启紧凑模式
+                // }),
+                    {
+                        // less vars，customize ant design theme
 
-                // 'primary-color': '#F5222D',
-                // 'link-color': '#F5222D',
-                // 'border-radius-base': '2px'
-                'primary-color': '#FAAD14', // 全局主色
-                'link-color': '#1890ff', // 链接色
-                'success-color': '#52c41a', // 成功色
-                'warning-color': '#faad14', // 警告色
-                'error-color': '#f5222d', // 错误色
-                'font-size-base': '14px', // 主字号
-                // 'heading-color': rgba(0, 0, 0, 0.85), // 标题色
-                // 'text-color': rgba(0, 0, 0, 0.65),// 主文本色
-                // 'text-color-secondary': rgba(0, 0, 0, 0.45), // 次文本色
-                // 'disabled-color': rgba(0, 0, 0, 0.25), // 失效色
-                'border-radius-base': '2px', // 组件/浮层圆角
-                'border-color-base': '#d9d9d9' // 边框色
-                },
+                        // 'primary-color': '#F5222D',
+                        // 'link-color': '#F5222D',
+                        // 'border-radius-base': '2px'
+                        'primary-color': '#FAAD14', // 全局主色
+                        'link-color': '#1890ff', // 链接色
+                        'success-color': '#52c41a', // 成功色
+                        'warning-color': '#faad14', // 警告色
+                        'error-color': '#f5222d', // 错误色
+                        'font-size-base': '14px', // 主字号
+                        // 'heading-color': rgba(0, 0, 0, 0.85), // 标题色
+                        // 'text-color': rgba(0, 0, 0, 0.65),// 主文本色
+                        // 'text-color-secondary': rgba(0, 0, 0, 0.45), // 次文本色
+                        // 'disabled-color': rgba(0, 0, 0, 0.25), // 失效色
+                        'border-radius-base': '2px', // 组件/浮层圆角
+                        'border-color-base': '#d9d9d9', // 边框色
+                        'autoHideHeader': true,
+                        'fixedHeader': true
+                    },
 // DO NOT REMOVE THIS LINE
                 javascriptEnabled: true
-            }
+            },
         }
     },
 

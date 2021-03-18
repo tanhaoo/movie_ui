@@ -1,12 +1,7 @@
 <template>
   <div class="footer">
     <div class="links">
-      <a href="https://www.mashibing.com/" target="_blank">官网</a>
-    </div>
-    <div class="copyright">
-      Copyright
-      <a-icon type="copyright" />2020
-      <span>马士兵技术组出品</span>
+      <a href="https://github.com/tanhaoo" target="_blank">By TanHaoo</a>
     </div>
   </div>
 </template>

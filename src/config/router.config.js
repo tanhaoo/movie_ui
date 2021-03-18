@@ -16,7 +16,7 @@ export const asyncRouterMap = [
                 name: 'personaloffice',
                 redirect: '/personaloffice/mynews',
                 component: RouteView,
-                meta: { title: '个人办公', keepAlive: true, icon: bxAnaalyse, permission: ['901'] },
+                meta: { title: '电影', keepAlive: true, icon: bxAnaalyse, permission: ['901'] },
                 children: [
                     {
                         path: 'mynews',
@@ -36,7 +36,7 @@ export const asyncRouterMap = [
                 path: '/propertymanage',
                 name: '住宅小区',
                 component: PageView,
-                meta: { title: '楼盘管理', keepAlive: true, icon: 'slack', permission: ['221'] },
+                meta: { title: '剧集', keepAlive: true, icon: 'slack', permission: ['221'] },
                 redirect: '/propertymanage/property/add',
                 children: [
                      {
@@ -128,7 +128,7 @@ export const asyncRouterMap = [
             {
                 path: 'owner',
                 component: RouteView,
-                meta: { title: '业主信息', keepAlive: true, icon: bxAnaalyse, permission: ['223'] },
+                meta: { title: '人物', keepAlive: true, icon: bxAnaalyse, permission: ['223'] },
                 redirect: '/owner/information',
                 children: [
                     {
@@ -204,7 +204,7 @@ export const asyncRouterMap = [
             {
                 path: 'cost',
                 component: RouteView,
-                meta: { title: '费项设置', keepAlive: true, icon: bxAnaalyse, permission: ['223'] },
+                meta: { title: '更多', keepAlive: true, icon: bxAnaalyse, permission: ['223'] },
                 redirect: '/cost/common/common',
                 children: [
                     {

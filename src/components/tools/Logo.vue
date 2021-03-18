@@ -1,16 +1,20 @@
 <template>
-  <div class="logo">
-    <img src="~@/assets/logo.png" alt />
-  </div>
+    <div class="logo">
+        <a @click="toDashBoard()" target="_blank">
+            <img src="~@/assets/movie.png" alt/>
+        </a>
+    </div>
 </template>
 
 <script>
-import LogoSvg from '@/assets/logo.svg?inline'
 
 export default {
     name: 'Logo',
-    components: {
-        LogoSvg
+    components: {},
+    methods: {
+        toDashBoard() {
+            this.$router.push({path: '/'})
+        }
     },
     props: {
         title: {
