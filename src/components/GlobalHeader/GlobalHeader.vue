@@ -105,7 +105,6 @@ export default {
           this.oldScrollTop = scrollTop
           this.ticking = false
         })
-          console.log(this.visible)
       }
     },
     toggle() {

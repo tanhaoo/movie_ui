@@ -8,26 +8,26 @@ export const asyncRouterMap = [
         name: 'index',
         component: BasicLayout,
         meta: { title: '首页' },
-        redirect: '/personaloffice/mynews',
+        redirect: '/home/myHome',
         children: [
             // dashboard
             {
-                path: 'personaloffice',
-                name: 'personaloffice',
-                redirect: '/personaloffice/mynews',
+                path: 'home',
+                name: 'home',
+                redirect: '/home/myHome',
                 component: RouteView,
                 meta: { title: '电影', keepAlive: true, icon: bxAnaalyse, permission: ['901'] },
                 children: [
                     {
-                        path: 'mynews',
+                        path: 'myHome',
                         name: '我的消息',
-                        component: () => import('@/views/personaloffice/mynews'),
+                        component: () => import('@/views/home/myHome'),
                         meta: { title: '我的消息', keepAlive: true, permission: ['901', '90101'] }
                     },
                     {
                         path: 'mymail',
                         name: '我的邮件',
-                        component: () => import('@/views/personaloffice/mymail'),
+                        component: () => import('@/views/home/mymail'),
                         meta: { title: '我的邮件', keepAlive: true, permission: ['901', '90102'] }
                     }
                 ]

@@ -163,7 +163,7 @@ export default {
         // this.requiredTwoStepCaptcha = true
     },
     methods: {
-        ...mapActions(['Login', 'Logout']),
+        ...mapActions(['Login', 'logout']),
         // handler
         handleUsernameOrEmail(rule, value, callback) {
             const {state} = this
@@ -258,7 +258,7 @@ export default {
             this.loginSuccess()
         },
         stepCaptchaCancel() {
-            this.Logout().then(() => {
+            this.logout().then(() => {
                 this.loginBtn = false
                 this.stepCaptchaVisible = false
             })

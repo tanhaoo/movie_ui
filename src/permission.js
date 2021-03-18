@@ -11,7 +11,7 @@ import {ACCESS_TOKEN} from '@/store/mutation-types'
 NProgress.configure({showSpinner: false}) // NProgress Configuration
 
 const whiteList = ['login', 'register', 'registerResult'] // no redirect whitelist
-const defaultRoutePath = '/personaloffice/mynews'
+const defaultRoutePath = '/home/myHome'
 
 router.beforeEach((to, from, next) => {
     NProgress.start() // start progress bar
@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
             NProgress.done()
         } else {
             if (store.getters.roles.length === 0) {
-                store.dispatch('GetInfo').then(res => {
+                store.dispatch('getInfo').then(res => {
                     const roles = res.result && res.result.role
                     console.dir(roles)
                     store.dispatch('GenerateRoutes', {roles}).then(() => {
@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
                             message: '错误',
                             description: '请求用户信息失败，请重试'
                         })
-                        store.dispatch('Logout').then(() => {
+                        store.dispatch('logout').then(() => {
                             next({path: '/user/login', query: {redirect: to.fullPath}})
                         })
                     })

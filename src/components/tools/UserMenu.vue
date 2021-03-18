@@ -55,13 +55,13 @@ export default {
         ...mapGetters(['nickname', 'avatar'])
     },
     methods: {
-        ...mapActions(['Logout']),
+        ...mapActions(['logout']),
         handleLogout() {
             this.$confirm({
                 title: '提示',
                 content: '真的要注销登录吗 ?',
                 onOk: () => {
-                    return this.Logout({})
+                    return this.logout({})
                         .then(() => {
                             setTimeout(() => {
                                 window.location.reload()
