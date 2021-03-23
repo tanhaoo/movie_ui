@@ -33,14 +33,14 @@
                   <a-tag
                     :key="tag"
                     :closable="index !== 0"
-                    :afterClose="() => handleTagClose(tag)"
+                    :close="() => handleTagClose(tag)"
                   >{{ `${tag.slice(0, 20)}...` }}</a-tag>
                 </a-tooltip>
                 <a-tag
                   v-else
                   :key="tag"
                   :closable="index !== 0"
-                  :afterClose="() => handleTagClose(tag)"
+                  :close="() => handleTagClose(tag)"
                 >{{ tag }}</a-tag>
               </template>
               <a-input
@@ -137,7 +137,7 @@ export default {
         }
     },
     mounted() {
-        this.getTeams()
+        // this.getTeams()
     },
     methods: {
         ...mapGetters(['nickname', 'avatar']),

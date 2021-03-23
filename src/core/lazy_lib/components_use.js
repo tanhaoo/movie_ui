@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 /**
  * 该文件是为了按需加载，剔除掉了一些不需要的框架组件。
@@ -8,48 +7,49 @@
  */
 import Vue from 'vue'
 import {
-  ConfigProvider,
-  Layout,
-  Input,
-  InputNumber,
-  Button,
-  Switch,
-  Radio,
-  Checkbox,
-  Select,
-  Card,
-  Form,
-  Row,
-  Col,
-  Modal,
-  Table,
-  Tabs,
-  Icon,
-  Badge,
-  Popover,
-  Dropdown,
-  List,
-  Avatar,
-  Breadcrumb,
-  Steps,
-  Spin,
-  Menu,
-  Drawer,
-  Tooltip,
-  Alert,
-  Tag,
-  Divider,
-  DatePicker,
-  TimePicker,
-  Upload,
-  Progress,
-  Skeleton,
-  Popconfirm,
-  message,
-  notification,
-  Transfer,
-  Cascader,
-  FormModel
+    ConfigProvider,
+    Layout,
+    Input,
+    InputNumber,
+    Button,
+    Switch,
+    Radio,
+    Checkbox,
+    Select,
+    Card,
+    Form,
+    Row,
+    Col,
+    Modal,
+    Table,
+    Tabs,
+    Icon,
+    Badge,
+    Popover,
+    Dropdown,
+    List,
+    Avatar,
+    Breadcrumb,
+    Steps,
+    Spin,
+    Menu,
+    Drawer,
+    Tooltip,
+    Alert,
+    Tag,
+    Divider,
+    DatePicker,
+    TimePicker,
+    Upload,
+    Progress,
+    Skeleton,
+    Popconfirm,
+    message,
+    notification,
+    Transfer,
+    Cascader,
+    FormModel,
+    Collapse
 } from 'ant-design-vue'
 // import VueCropper from 'vue-cropper'
 
@@ -95,6 +95,7 @@ Vue.use(notification)
 Vue.use(Transfer)
 Vue.use(Cascader)
 Vue.use(FormModel)
+Vue.use(Collapse)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

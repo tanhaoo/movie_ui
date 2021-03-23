@@ -24,13 +24,16 @@
 
 
 import {getMovieByPages} from "@/api/film";
+import store from "@/store";
 
 const QS = require('qs')
 const filmData = []
 
 export default {
+    name: 'myHome',
     created() {
         this.loadMovie();
+        console.log(store.getters.roles.permissionList)
     },
     data() {
         return {
