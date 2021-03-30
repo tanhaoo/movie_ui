@@ -10,6 +10,7 @@ const api = {
     userInfo: '/user/info',
     // property-add
     oneStep: '/oneStep',
-    getMovieByPages:'/movie/getMovieByPages'
+    getMovieByPages: '/movie/getMovieByPages',
+    getCurrentRatePeople: '/movie/getCurrentRatePeople'
 }
 export default api

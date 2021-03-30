@@ -2,17 +2,49 @@
     <div class="home">
         <div class="banner">
             <div class="activity-panel">
-                <ul class="box">
-                    <div style="margin-left: -28px;">
-                        <li class="content" v-for="(item, index) in filmData" :key="index" @click="linkTo(item)">
+                <a-list :grid="{gutter: 1, column: 4 }" :data-source="filmData">
+                    <a-list-item style="width: 20%" slot="renderItem" slot-scope="item, index">
+                        <div style="background-color: #fff;height:350px;width: 180px;border-radius: 8px;">
+                            <div style="position:absolute;right:56px;">
+                                <a-tooltip overlayClassName="tooltip" trigger="click" placement="bottom">
+                                    <template slot="title">
+                                        <a-list item-layout="horizontal">
+                                            <a-list-item>
+                                                <a @click="addListClick(item.movieId)">
+                                                    <a-icon type="bars"/>
+                                                    添加到收藏清单</a>
+                                            </a-list-item>
+                                            <a-list-item>
+                                                <a>
+                                                    <a-icon type="heart" theme="filled"/>
+                                                    我的最爱</a>
+                                            </a-list-item>
+                                            <a-list-item>
+                                                <a>
+                                                    <a-icon type="tag" theme="filled"/>
+                                                    待看清单</a>
+                                            </a-list-item>
+                                            <a-list-item>
+                                                <a>
+                                                    <a-icon type="star" theme="filled"/>
+                                                    你的评分</a>
+                                            </a-list-item>
+                                        </a-list>
+                                    </template>
+                                    <a-button ghost type="link">
+                                        <a-icon style="font-size: 18px;margin-top: 5px" type="down-circle"
+                                                theme="filled"/>
+                                    </a-button>
+                                </a-tooltip>
+                            </div>
                             <img :src="item.movieUrl" class="i"/>
-                            <a class="cover-link"></a>
-                            <span style="font-size: 15px;font-family: 微软雅黑;font-weight: bold">{{
-                                    item.movieName
-                                }}</span>
-                        </li>
-                    </div>
-                </ul>
+                            <p style="font-family: Arial, Helvetica, sans-serif;color: #000;font-size:16px;font-weight: bold;text-align: left;margin-left: 5px">
+                                {{ item.movieName }}
+                                <a-rate :default-value="2.5" v-model="item.movieRating" allow-half disabled/>
+                            </p>
+                        </div>
+                    </a-list-item>
+                </a-list>
             </div>
             <a-button class="load-button" type="primary" @click="loadMovie()">
                 加载更多
@@ -38,7 +70,7 @@ export default {
     data() {
         return {
             currentPage: 0,
-            filmData
+            filmData,
         }
     }
     ,
@@ -55,8 +87,10 @@ export default {
                 this.currentPage = result.current
                 result.records.map(item => {
                     filmData.push({
+                        movieId: item.id,
                         movieName: item.movieName,
-                        movieUrl: item.url
+                        movieUrl: item.url,
+                        movieRating:item.rating
                     })
                 })
             }).catch(err => {
@@ -66,6 +100,9 @@ export default {
                 })
             })
         },
+        addListClick(value) {
+            console.log("list|" + value)
+        }
 
     }
 }
@@ -75,6 +112,19 @@ export default {
 .home {
     display: flex;
     flex-direction: column;
+}
+
+a {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #000;
+}
+
+.tooltip {
+    .ant-tooltip-inner {
+        background-color: #fff !important;
+    }
+
+    max-width: 400px;
 }
 
 .banner {
@@ -121,7 +171,7 @@ export default {
 
 .activity-panel {
     width: 1220px;
-    margin: 0 auto;
+    margin-left: 48px;
 
     .box {
         overflow: hidden;
@@ -140,8 +190,8 @@ export default {
         float: left;
         position: relative;
         box-sizing: border-box;
-        width: 20%;
-        height: 320px;
+        width: 225px;
+        height: 435px;
         text-align: center;
     }
 
@@ -160,21 +210,23 @@ export default {
     }
 
     .i {
-        width: 210px;
-        height: 280px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        width: 180px;
+        height: 270px;
     }
 
-    .cover-link {
-        cursor: pointer;
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 4;
-        background: url(data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==) repeat;
-    }
+    //.cover-link {
+    //    cursor: pointer;
+    //    display: block;
+    //    position: absolute;
+    //    top: 0;
+    //    right: 0;
+    //    bottom: 0;
+    //    left: 0;
+    //    z-index: 4;
+    //    background: url(data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==) repeat;
+    //}
 
     a {
         color: #5079d9;

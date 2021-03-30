@@ -1,11 +1,11 @@
 <template>
     <div class="top-rated">
         <a-layout>
-            <a-layout-sider width="250" style="background: #fff;">
+            <a-layout-sider width="250" style="background: #fff;margin-left: 30px">
                 <a-collapse v-model="activeKey" :expand-icon-position="'right'" class="shadow">
                     <a-collapse-panel key="1" header="排序" :style="customStyle">
                         <p>结果排序</p>
-                        <a-select default-value="hotUp" style="width: 200px;"
+                        <a-select v-model="selectStatus.resultSort" default-value="hotUp" style="width: 200px;"
                                   @change="handleChange">
                             <a-select-option value="hotDrops">
                                 热门降序
@@ -44,7 +44,7 @@
                                 <a-icon type="question-circle"/>
                             </a-tooltip>
                         </p>
-                        <a-radio-group v-model="radioValue" @change="onRadioChange">
+                        <a-radio-group v-model="selectStatus.display" @change="onRadioChange">
                             <a-radio :style="radioStyle" :value="1">
                                 全部
                             </a-radio>
@@ -180,17 +180,26 @@
                             </a-row>
                         </a-checkbox-group>
                         <hr align=left width=300 color=#d9d9d9 size=1/>
+                        <p>用户评分</p>
+                        <a-slider range :default-value="selectStatus.rating" :marks="rateMarks" :min="1" :max="5"
+                                  :tip-formatter="rateFormatter" @afterChange="onRateAfterChange"/>
+                        <hr align=left width=300 color=#d9d9d9 size=1/>
+                        <p>最少人投票数</p>
+                        <a-slider v-model="selectStatus.vote" :step="50" :marks="voteMarks" :default-value="0" :min="0"
+                                  :max="peopleMaxValue"/>
+                        <hr align=left width=300 color=#d9d9d9 size=1/>
+                        <p>时长</p>
+                        <a-slider range :default-value="selectStatus.time" :step="50" :marks="timeMarks" :min="0"
+                                  :max="400"
+                                  :tip-formatter="timeFormatter" @afterChange="onTimeAfterChange"/>
+                        <p style="font-size: 14px;margin-left: 8px"></p>
+                        <hr align=left width=300 color=#d9d9d9 size=1/>
                     </a-collapse-panel>
                 </a-collapse>
-                <a-collapse v-model="activeKey" :expand-icon-position="'right'" class="shadow">
-                    <a-collapse-panel key="3" header="地区" :style="customStyle">
-                        <p>{{ text }}</p>
-
-                    </a-collapse-panel>
-                </a-collapse>
+                <a-button type="primary" style="width: 250px;height: 50px;border-radius: 25px">搜索</a-button>
             </a-layout-sider>
             <a-layout-content>
-                <my-home style="margin-left: 10px"></my-home>
+                <my-home style="margin-left: -15px"></my-home>
             </a-layout-content>
         </a-layout>
     </div>
@@ -198,14 +207,29 @@
 
 <script>
 import MyHome from "@/views/movie/myHome";
+import {getCurrentRatePeople} from "@/api/film";
 
 export default {
     components: {MyHome},
+    mounted() {
+        getCurrentRatePeople().then(res => {
+            this.peopleMaxValue = (parseInt(res.result / 100) + 1) * 100
+        }).catch(() => {
+            this.$notification.error({
+                message: '提示',
+                duration: 3,
+                description: '统计评分人数失败，请检查网络',
+                placement: 'topLeft'
+            })
+        })
+    },
     data() {
         return {
-            radioValue: 1,
+            rateValue: [3, 5],
+            peopleMaxValue: 0,
+            timeValue: [],
             text: 1,
-            activeKey: ['2'],
+            activeKey: ['1'],
             customStyle:
                 'width:250px; background: #ffffff; border-radius: 10px;margin-bottom: 24px;border: 20;overflow: hidden;' +
                 'font-size:20px;text-align: left;font-weight:bold',
@@ -214,6 +238,29 @@ export default {
                 height: '30px',
                 lineHeight: '30px',
             },
+            timeMarks: {
+                0: '0',
+                100: '100',
+                200: '200',
+                300: '300',
+                400: '400'
+            },
+            rateMarks: {
+                0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5'
+            },
+            voteMarks: {
+                0: '0', 100: '100', 200: '200', 300: '300', 400: '400'
+            },
+            selectStatus: {
+                resultSort: "hotDrops",
+                //显示状态 1 全部 2未观看 3 已观看
+                display: 1,
+                releaseData: [],
+                type: [],
+                rating: [1, 5],
+                vote: 0,
+                time: [0, 400]
+            }
             // movieType: [Animation, Adventure, Comedy, Family, Romance, Drama,
             // Crime, Thriller, Action, Fantasy, Horror, Biography, History, Mystery,
             // Sci - Fi, War, Sport, Music, Documentary, Musical, Western, Short, Film - Noir, News]
@@ -224,23 +271,40 @@ export default {
         handleClick(event) {
             // If you don't want click extra trigger collapse, you can prevent this:
             event.stopPropagation();
+        }, onRateAfterChange(value) {
+            this.rateValue = value
+            console.log(this.rateValue)
+        },
+        onTimeAfterChange(value) {
+            this.timeValue = value
+            console.log(this.timeValue)
+        }
+        , rateFormatter(value) {
+            return `Rated ${this.rateValue[0]} - ${this.rateValue[1]}`;
+        },
+        timeFormatter(value) {
+            return ` 0 - ${value} minutes`;
         },
         handleChange() {
-            this.$notification.success({
+            this.$notification.error({
                 message: '提示',
                 duration: 3,
                 description: '登录以过滤你观看的影片',
-                bottomRight
+                placement: 'topLeft'
             })
         },
         onRadioChange(e) {
-            console.log('radio checked', e.target.value);
+            // console.log('radio checked', e.target.value);
+            console.log(this.selectStatus.display)
         },
         onSelectDateChange(date, dateString) {
+            this.selectStatus.releaseData = dateString;
             console.log(date, dateString);
+            console.log(this.selectStatus.releaseData)
         },
         onCheckChange(checkedValues) {
-            console.log('checked = ', checkedValues);
+            this.selectStatus.type = checkedValues;
+            console.log('checked = ', this.selectStatus.type);
         }
     }
 }

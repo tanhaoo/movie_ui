@@ -8,5 +8,11 @@ export function getMovieByPages(parameter) {
         method: 'post',
         data: parameter
     })
+}
 
+export function getCurrentRatePeople() {
+    return axios({
+        url: api.getCurrentRatePeople,
+        method: 'post',
+    })
 }

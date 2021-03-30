@@ -16,7 +16,7 @@ export const asyncRouterMap = [
                 name: 'movie',
                 redirect: '/movie/myHome',
                 component: RouteView,
-                meta: {title: '电影', keepAlive: true, icon: bxAnaalyse, permission: ['901']},
+                meta: {title: '电影', keepAlive: true, icon: 'play-circle', permission: ['901']},
                 children: [
                     {
                         path: 'myHome',
