@@ -50,7 +50,7 @@ export default {
                 this.openKeys = this.cachedOpenKeys
             }
         },
-        $route: function() {
+        $route: function () {
             this.updateMenu()
         }
     },
@@ -70,13 +70,13 @@ export default {
                 this.openKeys = latestOpenKey ? [latestOpenKey] : []
             }
         },
-        onSelect({ item, key, selectedKeys }) {
+        onSelect({item, key, selectedKeys}) {
             this.selectedKeys = selectedKeys
-            this.$emit('select', { item, key, selectedKeys })
+            this.$emit('select', {item, key, selectedKeys})
         },
         updateMenu() {
             const routes = this.$route.matched.concat()
-            const { hidden } = this.$route.meta
+            const {hidden} = this.$route.meta
             if (routes.length >= 3 && hidden) {
                 routes.pop()
                 this.selectedKeys = [routes[routes.length - 1].path]
@@ -103,21 +103,21 @@ export default {
         renderMenuItem(menu) {
             const target = menu.meta.target || null
             const CustomTag = (target && 'a') || 'router-link'
-            const props = { to: { name: menu.name } }
-            const attrs = { href: menu.path, target: menu.meta.target }
+            const props = {to: {name: menu.name}}
+            const attrs = {href: menu.path, target: menu.meta.target}
 
             if (menu.children && menu.hideChildrenInMenu) {
                 // 把有子菜单的 并且 父菜单是要隐藏子菜单的
                 // 都给子菜单增加一个 hidden 属性
                 // 用来给刷新页面时， selectedKeys 做控制用
                 menu.children.forEach(item => {
-                    item.meta = Object.assign(item.meta, { hidden: true })
+                    item.meta = Object.assign(item.meta, {hidden: true})
                 })
             }
 
             return (
-                <Menu.Item {...{ key: menu.path }}>
-                    <CustomTag {...{ props, attrs }}>
+                <Menu.Item {...{key: menu.path}}>
+                    <CustomTag {...{props, attrs}}>
                         {this.renderIcon(menu.meta.icon)}
                         <span>{menu.meta.title}</span>
                     </CustomTag>
@@ -130,7 +130,7 @@ export default {
                 menu.children.forEach(item => itemArr.push(this.renderItem(item)))
             }
             return (
-                <Menu.SubMenu {...{ key: menu.path }}>
+                <Menu.SubMenu {...{key: menu.path}}>
                     <span slot="title">
                         {this.renderIcon(menu.meta.icon)}
                         <span>{menu.meta.title}</span>
@@ -145,7 +145,7 @@ export default {
             }
             const props = {}
             typeof icon === 'object' ? (props.component = icon) : (props.type = icon)
-            return <Icon {...{ props }} />
+            return <Icon {...{props}} />
         }
     },
 

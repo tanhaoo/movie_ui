@@ -10,7 +10,7 @@
                                     <template slot="title">
                                         <a-list item-layout="horizontal">
                                             <a-list-item>
-                                                <a @click="addListClick(item.movieId)">
+                                                <a @click="addListClick(item.id)">
                                                     <a-icon type="bars"/>
                                                     添加到收藏清单</a>
                                             </a-list-item>
@@ -32,11 +32,11 @@
                                     </a-button>
                                 </a-tooltip>
                             </div>
-                            <img :src="item.movieUrl" class="i"/>
+                            <img :src="item.url" class="i"/>
                             <div style="position:absolute;left:10px;margin-top: -17px">
                                 <a-progress class="progress" :strokeWidth=12
-                                            :strokeColor="getProgressColor(item.movieRating/5*100)" type="circle"
-                                            :percent="item.movieRating/5*100" :width="40">
+                                            :strokeColor="getProgressColor(item.rating/5*100)" type="circle"
+                                            :percent="item.rating/5*100" :width="40">
                                     <template #format="percent">
                                         <span style="color:#979A9A">{{ Number(percent).toFixed(0) }}%</span>
                                     </template>
@@ -58,80 +58,98 @@
 </template>
 <script>
 
-
 import {getMovieByPages, getMovieBySelectStatus} from "@/api/film";
 import store from "@/store";
 
 const QS = require('qs')
-const filmData = []
 
 export default {
-    name: 'myHome',
+    name: 'showPage',
     created() {
         // this.$store.commit("SELECT_STATUS", {
         //     queryCondition: []
         // })
-        this.loadMovie();
         console.log(store.getters.roles.permissionList)
+        // console.log(this.$store.state.selectStatus.queryCondition)
+        console.log(this.$route.name)
     },
     data() {
         return {
             currentPage: 0,
-            filmData,
+            filmData: [],
+            tempData: [],
             queryCondition: {}
         }
-    }
-    ,
+    },
     methods: {
         linkTo() {
             console.log("123")
         }
-        , loadMovie() {
+        , loadMovie(status, page, clear) {
+            if (clear)
+                this.filmData = clear
+            if (page)
+                this.currentPage = page
+            if (status)
+                this.queryCondition = status
+            this.queryCondition.currentPage = this.currentPage
+            console.log(this.currentPage)
             console.log(this.queryCondition)
-            console.log(this.$store.state.selectStatus.queryCondition.resultSort)
-            if (this.$store.state.selectStatus.queryCondition.resultSort !== undefined) {
-                console.log(JSON.stringify(this.queryCondition))
-                console.log(JSON.stringify(this.$store.state.selectStatus.queryCondition))
-                this.queryCondition.currentPage = 1
-                if (JSON.stringify(this.queryCondition) != JSON.stringify(this.$store.state.selectStatus.queryCondition)) {
-                    this.currentPage = 2
-                } else {
-                    this.currentPage++;
-                }
-                this.queryCondition = JSON.parse(JSON.stringify(this.$store.state.selectStatus.queryCondition))
-                this.queryCondition.currentPage = this.currentPage
-            }
-            if (this.queryCondition.resultSort === undefined) {
-                this.currentPage++;
-                let parameter = QS.stringify({'currentPage': this.currentPage, 'size': 30})
-                getMovieByPages(parameter).then(res => {
-                    let result = res.result;
-                    this.currentPage = result.current
-                    result.records.map(item => {
-                        filmData.push({
-                            movieId: item.id,
-                            movieName: item.movieName,
-                            movieUrl: item.url,
-                            movieRating: item.rating
-                        })
-                    })
-                }).catch(err => {
-                    this.$notification.error({
-                        message: '失败',
-                        description: 'Failed Loading Movies'
-                    })
+            getMovieBySelectStatus(this.queryCondition).then(res => {
+                let result = res.result
+                this.tempData = JSON.parse(JSON.stringify(result.records))
+                this.tempData.map(item => {
+                    this.filmData.push(item)
                 })
-            } else {
-                console.log("queryCon")
-                console.log(this.queryCondition)
-                getMovieBySelectStatus(this.queryCondition).then(res => {
-                    let result = res.result
-                    console.log(result)
-                }).catch(err => {
+                console.log(result)
+            }).catch(err => {
 
-                })
-            }
-            console.log(this.queryCondition.currentPage + "|page")
+            })
+            this.currentPage++
+            // console.log(this.$store.state.selectStatus.queryCondition.resultSort)
+            // if (this.$store.state.selectStatus.queryCondition.resultSort !== undefined) {
+            //     console.log(JSON.stringify(this.queryCondition))
+            //     console.log(JSON.stringify(this.$store.state.selectStatus.queryCondition))
+            //     this.queryCondition.currentPage = 1
+            //     if (JSON.stringify(this.queryCondition) != JSON.stringify(this.$store.state.selectStatus.queryCondition)) {
+            //         this.currentPage = 2
+            //     } else {
+            //         this.currentPage++;
+            //     }
+            //     this.queryCondition = JSON.parse(JSON.stringify(this.$store.state.selectStatus.queryCondition))
+            //     this.queryCondition.currentPage = this.currentPage
+            // }
+            // if (this.queryCondition.resultSort === undefined) {
+            //     this.currentPage++;
+            //     let parameter = QS.stringify({'currentPage': this.currentPage, 'size': 30})
+            //     getMovieByPages(parameter).then(res => {
+            //         let result = res.result;
+            //         this.currentPage = result.current
+            //         result.records.map(item => {
+            //             filmData.push({
+            //                 movieId: item.id,
+            //                 movieName: item.movieName,
+            //                 movieUrl: item.url,
+            //                 movieRating: item.rating
+            //             })
+            //         })
+            //     }).catch(err => {
+            //         this.$notification.error({
+            //             message: '失败',
+            //             description: 'Failed Loading Movies'
+            //         })
+            //     })
+            // } else {
+            //     console.log("queryCon")
+            //     console.log(this.queryCondition)
+            //     getMovieBySelectStatus(this.queryCondition).then(res => {
+            //         let result = res.result
+            //         console.log(result)
+            //     }).catch(err => {
+            //
+            //     })
+            // }
+            // console.log(this.queryCondition.currentPage + "|page")
         },
         addListClick(value) {
             console.log("list|" + value)

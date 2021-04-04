@@ -14,27 +14,27 @@ export const asyncRouterMap = [
             {
                 path: 'movie',
                 name: 'movie',
-                redirect: '/movie/myHome',
+                redirect: '/movie/home',
                 component: RouteView,
                 meta: {title: '电影', keepAlive: true, icon: 'play-circle', permission: ['901']},
                 children: [
-                   {
-                        path: 'myHome',
-                        name: '热门',
-                        component: () => import('@/views/movie/myHome'),
-                        meta: {title: '热门', keepAlive: true, permission: ['901']}
+                    {
+                        path: 'hot-Movie',
+                        name: 'hotMovie',
+                        component: () => import('@/views/movie/conditionPage'),
+                        meta: {title: '热门', keepAlive: true    , permission: ['901']},
                     },
                     {
                         path: 'top-rated',
-                        name: '高分',
-                        component: () => import('@/views/movie/topRated'),
+                        name: 'topRated',
+                        component: () => import('@/views/movie/conditionPage'),
                         meta: {title: '高分', keepAlive: true, permission: ['901']}
                     },
                     {
                         path: '/movie/home',
                         name: '展示',
                         component: () => import('@/views/movie/home'),
-                        meta: {}
+                        hidden: true,
                     },
                 ]
             },

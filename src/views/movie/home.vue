@@ -376,9 +376,6 @@ export default {
             hotData: [],
             rateData: [],
             firstShow: [],
-            secondShow: [],
-            thirdShow: [],
-            forthShow: [],
             isLogin: false,
             allData: [
                 {

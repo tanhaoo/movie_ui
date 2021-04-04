@@ -19,10 +19,10 @@
                             <a-select-option value="rateUp">
                                 评分升序
                             </a-select-option>
-                            <a-select-option value="releaseDateDrops">
+                            <a-select-option value="timeDrops">
                                 时长降序
                             </a-select-option>
-                            <a-select-option value="releaseDateUp">
+                            <a-select-option value="timeUp">
                                 时长升序
                             </a-select-option>
                             <a-select-option value="nameDrops">
@@ -55,9 +55,6 @@
                                 已观看的电影
                             </a-radio>
                         </a-radio-group>
-                        <hr align=left width=300 color=#d9d9d9 size=1/>
-                        <p>上映日期</p>
-                        <a-range-picker @change="onSelectDateChange"/>
                         <hr align=left width=300 color=#d9d9d9 size=1/>
                         <p>类型</p>
                         <a-checkbox-group @change="onCheckChange">
@@ -200,19 +197,19 @@
                 </a-button>
             </a-layout-sider>
             <a-layout-content>
-                <my-home style="margin-left: -15px" ></my-home>
+                <show-page style="margin-left: -15px" ref="statusHome"></show-page>
             </a-layout-content>
         </a-layout>
     </div>
 </template>
 
 <script>
-import MyHome from "@/views/movie/myHome";
+import ShowPage from "@/views/movie/showPage";
 import {getCurrentRatePeople, getMovieBySelectStatus} from "@/api/film";
 import selectStatus from "@/utils/selectStatus";
 
 export default {
-    components: {MyHome},
+    components: {ShowPage},
     mounted() {
         getCurrentRatePeople().then(res => {
             this.peopleMaxValue = (parseInt(res.result / 100) + 1) * 100
@@ -224,6 +221,18 @@ export default {
                 placement: 'topLeft'
             })
         })
+        if (this.$route.name == 'topRated')
+            this.selectStatus.resultSort = 'rateDrops'
+        this.selectMovie()
+    },
+    watch: {
+        '$route'(to, from) {
+            if (to.name == 'topRated')
+                this.selectStatus.resultSort = 'rateDrops'
+            else if (to.name == 'hotMovie')
+                this.selectStatus.resultSort = 'hotDrops'
+            this.selectMovie()
+        }
     },
     data() {
         return {
@@ -274,15 +283,10 @@ export default {
             let oldQuery = []
             oldQuery = JSON.parse(JSON.stringify(this.selectStatus))
             console.log(oldQuery)
-            this.$store.commit("SELECT_STATUS", {
-                queryCondition: oldQuery
-            })
-            // getMovieBySelectStatus(this.selectStatus).then(res => {
-            //     let result = res.result
-            //     console.log(result)
-            // }).catch(err => {
-            //
+            // this.$store.commit("SELECT_STATUS", {
+            //     queryCondition: oldQuery
             // })
+            this.$refs.statusHome.loadMovie(oldQuery, 1, [])
         },
         handleClick(event) {
             // If you don't want click extra trigger collapse, you can prevent this:
@@ -292,7 +296,7 @@ export default {
             console.log(this.selectStatus.rating)
         },
         onTimeAfterChange(value) {
-            this.selectStatus.time=value
+            this.selectStatus.time = value
             console.log(this.selectStatus.time)
         }
         , rateFormatter(value) {
