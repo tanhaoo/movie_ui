@@ -20,19 +20,21 @@
                     />
                     <user-menu></user-menu>
                 </div>
-                <div v-else :class="['top-nav-header-index', theme]">
-                    <div class="header-index-wide">
-                        <div class="header-index-left">
-                            <logo class="top-nav-header" :show-title="device !== 'mobile'"/>
-                            <s-menu v-if="device !== 'mobile'" mode="horizontal" :menu="menus" :theme="theme"/>
-                            <a-icon
-                                v-else
-                                class="trigger"
-                                :type="collapsed ? 'menu-fold' : 'menu-unfold'"
-                                @click="toggle"/>
+                <div v-else :class="['top-nav-header-index', theme]" style="background-color: #2d3a4b">
+                        <div class="header-index-wide">
+                            <div class="header-index-left">
+                                <!--                            <logo class="top-nav-header" :show-title="device !== 'mobile'"/>-->
+                                <h2>MovieDB</h2>
+                                <s-menu style="background-color: #2d3a4b" v-if="device !== 'mobile'" mode="horizontal"
+                                        :menu="menus" :theme="theme"/>
+                                <a-icon
+                                    v-else
+                                    class="trigger"
+                                    :type="collapsed ? 'menu-fold' : 'menu-unfold'"
+                                    @click="toggle"/>
+                            </div>
+                            <user-menu class="header-index-right"></user-menu>
                         </div>
-                        <user-menu class="header-index-right"></user-menu>
-                    </div>
                 </div>
             </a-layout-header>
         </div>
@@ -44,6 +46,7 @@ import UserMenu from '../tools/UserMenu'
 import SMenu from '../Menu/'
 import Logo from '../tools/Logo'
 import {mixin} from '@/utils/mixin'
+import store from "@/store";
 
 export default {
     name: 'GlobalHeader',
@@ -82,11 +85,18 @@ export default {
     data() {
         return {
             visible: true,
-            oldScrollTop: 0
+            oldScrollTop: 0,
+            isLogin: false,
         }
     },
     mounted() {
         document.addEventListener('scroll', this.handleScroll, {passive: true})
+        if (store.getters.roles.permissionList != undefined)
+            store.getters.roles.permissionList.map(item => {
+                if (item == '901')
+                    this.isLogin = true;
+            })
+        console.log(this.isLogin)
     },
     methods: {
         handleScroll() {
@@ -120,7 +130,16 @@ export default {
 <style lang="less" scoped>
 @import '../index.less';
 
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    font-size: 36px;
+    font-weight: bold;
+    margin-left: -50px;
+}
+
 .header-animat {
+    background-color: #2d3a4b;
     position: relative;
     z-index: @ant-global-header-zindex;
 }

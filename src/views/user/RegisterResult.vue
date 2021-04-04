@@ -1,14 +1,14 @@
 <template>
-  <result :isSuccess="true" :content="false" :title="email" :description="description">
-    <template slot="action">
-      <a-button size="large" type="primary">查看邮箱</a-button>
-      <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回首页</a-button>
-    </template>
-  </result>
+    <result class="a" :isSuccess="true" :content="false" :title="email" :description="description">
+        <template slot="action">
+            <a-button size="large" type="primary">查看用户个人信息</a-button>
+            <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回主页</a-button>
+        </template>
+    </result>
 </template>
 
 <script>
-import { Result } from '@/components'
+import {Result} from '@/components'
 
 export default {
     name: 'RegisterResult',
@@ -17,7 +17,7 @@ export default {
     },
     data() {
         return {
-            description: '激活邮件已发送到你的邮箱中，邮件有效期为24小时。请及时登录邮箱，点击邮件中的链接激活帐户。',
+            description: '你可以制作并维护自己的收藏清单,跟踪你喜爱的电影和剧集，并获得推荐',
             form: {}
         }
     },
@@ -33,11 +33,17 @@ export default {
     },
     methods: {
         goHomeHandle() {
-            this.$router.push({ name: 'login' })
+            this.$router.push({name: 'login'})
         }
     }
 }
 </script>
 
-<style scoped>
+<style lang="scss" rel="stylesheet/scss">
+
+div.result {
+    .title {
+        color: #fff;
+    }
+}
 </style>

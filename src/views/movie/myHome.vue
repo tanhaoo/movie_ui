@@ -21,11 +21,6 @@
                                             </a-list-item>
                                             <a-list-item>
                                                 <a>
-                                                    <a-icon type="tag" theme="filled"/>
-                                                    待看清单</a>
-                                            </a-list-item>
-                                            <a-list-item>
-                                                <a>
                                                     <a-icon type="star" theme="filled"/>
                                                     你的评分</a>
                                             </a-list-item>
@@ -38,9 +33,18 @@
                                 </a-tooltip>
                             </div>
                             <img :src="item.movieUrl" class="i"/>
-                            <p style="font-family: Arial, Helvetica, sans-serif;color: #000;font-size:16px;font-weight: bold;text-align: left;margin-left: 5px">
+                            <div style="position:absolute;left:10px;margin-top: -17px">
+                                <a-progress class="progress" :strokeWidth=12
+                                            :strokeColor="getProgressColor(item.movieRating/5*100)" type="circle"
+                                            :percent="item.movieRating/5*100" :width="40">
+                                    <template #format="percent">
+                                        <span style="color:#979A9A">{{ Number(percent).toFixed(0) }}%</span>
+                                    </template>
+                                </a-progress>
+                            </div>
+                            <p style="margin-top:25px;font-family: Arial, Helvetica, sans-serif;color: #000;font-size:16px;font-weight: bold;text-align: left;margin-left: 5px">
                                 {{ item.movieName }}
-                                <a-rate :default-value="2.5" v-model="item.movieRating" allow-half disabled/>
+                                <!--                                <a-rate :default-value="2.5" v-model="item.movieRating" allow-half disabled/>-->
                             </p>
                         </div>
                     </a-list-item>
@@ -55,7 +59,7 @@
 <script>
 
 
-import {getMovieByPages} from "@/api/film";
+import {getMovieByPages, getMovieBySelectStatus} from "@/api/film";
 import store from "@/store";
 
 const QS = require('qs')
@@ -64,6 +68,9 @@ const filmData = []
 export default {
     name: 'myHome',
     created() {
+        // this.$store.commit("SELECT_STATUS", {
+        //     queryCondition: []
+        // })
         this.loadMovie();
         console.log(store.getters.roles.permissionList)
     },
@@ -71,6 +78,7 @@ export default {
         return {
             currentPage: 0,
             filmData,
+            queryCondition: {}
         }
     }
     ,
@@ -79,35 +87,84 @@ export default {
             console.log("123")
         }
         , loadMovie() {
-            console.log("loadMovie")
-            this.currentPage++;
-            let parameter = QS.stringify({'currentPage': this.currentPage, 'size': 30})
-            getMovieByPages(parameter).then(res => {
-                let result = res.result;
-                this.currentPage = result.current
-                result.records.map(item => {
-                    filmData.push({
-                        movieId: item.id,
-                        movieName: item.movieName,
-                        movieUrl: item.url,
-                        movieRating:item.rating
+            console.log(this.queryCondition)
+            console.log(this.$store.state.selectStatus.queryCondition.resultSort)
+            if (this.$store.state.selectStatus.queryCondition.resultSort !== undefined) {
+                console.log(JSON.stringify(this.queryCondition))
+                console.log(JSON.stringify(this.$store.state.selectStatus.queryCondition))
+                this.queryCondition.currentPage = 1
+                if (JSON.stringify(this.queryCondition) != JSON.stringify(this.$store.state.selectStatus.queryCondition)) {
+                    this.currentPage = 2
+                } else {
+                    this.currentPage++;
+                }
+                this.queryCondition = JSON.parse(JSON.stringify(this.$store.state.selectStatus.queryCondition))
+                this.queryCondition.currentPage = this.currentPage
+            }
+            if (this.queryCondition.resultSort === undefined) {
+                this.currentPage++;
+                let parameter = QS.stringify({'currentPage': this.currentPage, 'size': 30})
+                getMovieByPages(parameter).then(res => {
+                    let result = res.result;
+                    this.currentPage = result.current
+                    result.records.map(item => {
+                        filmData.push({
+                            movieId: item.id,
+                            movieName: item.movieName,
+                            movieUrl: item.url,
+                            movieRating: item.rating
+                        })
+                    })
+                }).catch(err => {
+                    this.$notification.error({
+                        message: '失败',
+                        description: 'Failed Loading Movies'
                     })
                 })
-            }).catch(err => {
-                this.$notification.error({
-                    message: '失败',
-                    description: 'Failed Loading Movies'
+            } else {
+                console.log("queryCon")
+                console.log(this.queryCondition)
+                getMovieBySelectStatus(this.queryCondition).then(res => {
+                    let result = res.result
+                    console.log(result)
+                }).catch(err => {
+
                 })
-            })
+            }
+            console.log(this.queryCondition.currentPage + "|page")
         },
         addListClick(value) {
             console.log("list|" + value)
+        },
+        getProgressColor(successPercent) {
+            let color = ''
+            if (successPercent < 40) {
+                color = '#f50'
+            } else if (successPercent >= 40 && successPercent < 70) {
+                color = '#FF9900'
+            } else if (successPercent >= 70) {
+                color = '#21d07a'
+            }
+            return color
         }
-
     }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss">
+
+div.ant-progress-circle,
+div.ant-progress-line {
+    margin-right: 8px;
+    margin-bottom: 8px;
+
+
+    .ant-progress-text {
+        color: #e4e8ec;
+        font-size: 15px;
+        font-weight: bold;
+    }
+}
+
 
 .home {
     display: flex;

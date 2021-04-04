@@ -13,6 +13,7 @@ import getters from './getters'
 import oneStep from "@/store/modules/oneStep";
 import twoStep from "@/store/modules/twoStep";
 import threeStep from "@/store/modules/threeStep";
+import selectStatus from "@/store/modules/selectStatus";
 
 Vue.use(Vuex)
 
@@ -24,7 +25,8 @@ export default new Vuex.Store({
         propertyAdd,
         oneStep,
         twoStep,
-        threeStep
+        threeStep,
+        selectStatus
     },
     state: {},
     mutations: {},

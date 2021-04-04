@@ -20,10 +20,10 @@
                                 评分升序
                             </a-select-option>
                             <a-select-option value="releaseDateDrops">
-                                上映日期降序
+                                时长降序
                             </a-select-option>
                             <a-select-option value="releaseDateUp">
-                                上映日期升序
+                                时长升序
                             </a-select-option>
                             <a-select-option value="nameDrops">
                                 片名(A-Z)
@@ -196,10 +196,11 @@
                         <hr align=left width=300 color=#d9d9d9 size=1/>
                     </a-collapse-panel>
                 </a-collapse>
-                <a-button type="primary" style="width: 250px;height: 50px;border-radius: 25px">搜索</a-button>
+                <a-button type="primary" style="width: 250px;height: 50px;border-radius: 25px" @click="selectMovie">搜索
+                </a-button>
             </a-layout-sider>
             <a-layout-content>
-                <my-home style="margin-left: -15px"></my-home>
+                <my-home style="margin-left: -15px" ></my-home>
             </a-layout-content>
         </a-layout>
     </div>
@@ -207,7 +208,8 @@
 
 <script>
 import MyHome from "@/views/movie/myHome";
-import {getCurrentRatePeople} from "@/api/film";
+import {getCurrentRatePeople, getMovieBySelectStatus} from "@/api/film";
+import selectStatus from "@/utils/selectStatus";
 
 export default {
     components: {MyHome},
@@ -225,9 +227,7 @@ export default {
     },
     data() {
         return {
-            rateValue: [3, 5],
             peopleMaxValue: 0,
-            timeValue: [],
             text: 1,
             activeKey: ['1'],
             customStyle:
@@ -255,12 +255,14 @@ export default {
                 resultSort: "hotDrops",
                 //显示状态 1 全部 2未观看 3 已观看
                 display: 1,
-                releaseData: [],
                 type: [],
                 rating: [1, 5],
                 vote: 0,
-                time: [0, 400]
-            }
+                time: [0, 400],
+                currentPage: 1,
+                size: 30
+            },
+            queryPage: 1
             // movieType: [Animation, Adventure, Comedy, Family, Romance, Drama,
             // Crime, Thriller, Action, Fantasy, Horror, Biography, History, Mystery,
             // Sci - Fi, War, Sport, Music, Documentary, Musical, Western, Short, Film - Noir, News]
@@ -268,19 +270,33 @@ export default {
         }
     },
     methods: {
+        selectMovie() {
+            let oldQuery = []
+            oldQuery = JSON.parse(JSON.stringify(this.selectStatus))
+            console.log(oldQuery)
+            this.$store.commit("SELECT_STATUS", {
+                queryCondition: oldQuery
+            })
+            // getMovieBySelectStatus(this.selectStatus).then(res => {
+            //     let result = res.result
+            //     console.log(result)
+            // }).catch(err => {
+            //
+            // })
+        },
         handleClick(event) {
             // If you don't want click extra trigger collapse, you can prevent this:
             event.stopPropagation();
         }, onRateAfterChange(value) {
-            this.rateValue = value
-            console.log(this.rateValue)
+            this.selectStatus.rating = value
+            console.log(this.selectStatus.rating)
         },
         onTimeAfterChange(value) {
-            this.timeValue = value
-            console.log(this.timeValue)
+            this.selectStatus.time=value
+            console.log(this.selectStatus.time)
         }
         , rateFormatter(value) {
-            return `Rated ${this.rateValue[0]} - ${this.rateValue[1]}`;
+            return `Rated ${this.selectStatus.rating[0]} - ${this.selectStatus.rating[1]}`;
         },
         timeFormatter(value) {
             return ` 0 - ${value} minutes`;

@@ -11,6 +11,7 @@ const api = {
     // property-add
     oneStep: '/oneStep',
     getMovieByPages: '/movie/getMovieByPages',
-    getCurrentRatePeople: '/movie/getCurrentRatePeople'
+    getCurrentRatePeople: '/movie/getCurrentRatePeople',
+    getMovieBySelectStatus: '/movie/getMovieBySelectStatus'
 }
 export default api

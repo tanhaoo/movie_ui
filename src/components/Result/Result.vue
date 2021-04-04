@@ -1,24 +1,24 @@
 <template>
-  <div class="result">
-    <div>
-      <a-icon
-        :class="{ 'icon': true, [`${type}`]: true }"
-        :type="localIsSuccess ? 'check-circle' : 'close-circle'"
-      />
+    <div class="result">
+        <div>
+            <a-icon
+                :class="{ 'icon': true, [`${type}`]: true }"
+                :type="localIsSuccess ? 'check-circle' : 'close-circle'"
+            />
+        </div>
+        <div class="title">
+            <slot name="title" >{{ title }}</slot>
+        </div>
+        <div class="description">
+            <slot name="description">{{ description }}</slot>
+        </div>
+        <div class="extra" v-if="$slots.default">
+            <slot></slot>
+        </div>
+        <div class="action" v-if="$slots.action">
+            <slot name="action"></slot>
+        </div>
     </div>
-    <div class="title">
-      <slot name="title">{{ title }}</slot>
-    </div>
-    <div class="description">
-      <slot name="description">{{ description }}</slot>
-    </div>
-    <div class="extra" v-if="$slots.default">
-      <slot></slot>
-    </div>
-    <div class="action" v-if="$slots.action">
-      <slot name="action"></slot>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -49,7 +49,7 @@ export default {
         }
     },
     computed: {
-        localIsSuccess: function() {
+        localIsSuccess: function () {
             return this.type === resultEnum[0]
         }
     }
@@ -68,31 +68,37 @@ export default {
         line-height: 72px;
         margin-bottom: 24px;
     }
+
     .success {
         color: #52c41a;
     }
+
     .error {
         color: red;
     }
+
     .title {
         font-size: 24px;
-        color: rgba(0, 0, 0, 0.85);
+        color:#fff;
         font-weight: 500;
         line-height: 32px;
         margin-bottom: 16px;
     }
+
     .description {
         font-size: 14px;
         line-height: 22px;
-        color: rgba(0, 0, 0, 0.45);
+        color:#fff;
         margin-bottom: 24px;
     }
+
     .extra {
         background: #fafafa;
         padding: 24px 40px;
         border-radius: 2px;
         text-align: left;
     }
+
     .action {
         margin-top: 32px;
     }

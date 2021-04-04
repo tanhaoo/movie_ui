@@ -16,3 +16,12 @@ export function getCurrentRatePeople() {
         method: 'post',
     })
 }
+
+
+export function getMovieBySelectStatus(parameter) {
+    return axios({
+        url: api.getMovieBySelectStatus,
+        method: 'post',
+        data:parameter
+    })
+}

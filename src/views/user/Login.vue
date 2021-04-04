@@ -42,46 +42,9 @@
                         </a-input>
                     </a-form-item>
                 </a-tab-pane>
-                <a-tab-pane key="tab2" tab="手机号登录">
-                    <a-form-item>
-                        <a-input
-                            size="large"
-                            type="text"
-                            placeholder="手机号"
-                            v-decorator="['mobile',
-                            {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: '请输入正确的手机号' }],
-                            validateTrigger: 'change'}]">
-                            <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(255,255,255)' }"/>
-                        </a-input>
-                    </a-form-item>
-
-                    <a-row :gutter="16">
-                        <a-col class="gutter-row" :span="16">
-                            <a-form-item>
-                                <a-input
-                                    size="large"
-                                    type="text"
-                                    placeholder="验证码"
-                                    v-decorator="['captcha', {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}]">
-                                    <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-                                </a-input>
-                            </a-form-item>
-                        </a-col>
-                        <a-col class="gutter-row" :span="8">
-                            <a-button
-                                class="getCaptcha"
-                                tabindex="-1"
-                                :disabled="state.smsSendBtn"
-                                @click.stop.prevent="getCaptcha"
-                                v-text="!state.smsSendBtn && '获取验证码' || (state.time+' s')"
-                            ></a-button>
-                        </a-col>
-                    </a-row>
-                </a-tab-pane>
             </a-tabs>
 
             <a-form-item>
-                <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
                 <router-link
                     :to="{ name: 'recover', params: { user: 'aaa'} }"
                     class="forge-password"
@@ -105,9 +68,8 @@
             class="login-button"
             size="large"
             type="primary"
-            :loading="state.loginBtn"
-            :disabled="state.loginBtn"
-        >游客登录
+            @click="register"
+        >注册
         </a-button>
 
         <two-step-captcha
@@ -149,7 +111,7 @@ export default {
                 loginType: 0,
                 smsSendBtn: false
             },
-            visiteBtn:false
+            visiteBtn: false
         }
     },
     created() {
@@ -282,6 +244,9 @@ export default {
                 description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
                 duration: 4
             })
+        },
+        register() {
+            this.$router.push({path: '/user/register'})
         }
     }
 }
@@ -340,6 +305,7 @@ export default {
         }
     }
 }
+
 button.login-button {
     padding: 0 15px;
     font-size: 16px;

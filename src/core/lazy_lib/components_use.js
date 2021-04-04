@@ -49,7 +49,7 @@ import {
     Transfer,
     Cascader,
     FormModel,
-    Collapse, Slider, Rate
+    Collapse, Slider, Rate, Carousel
 } from 'ant-design-vue'
 // import VueCropper from 'vue-cropper'
 
@@ -98,6 +98,8 @@ Vue.use(FormModel)
 Vue.use(Collapse)
 Vue.use(Slider)
 Vue.use(Rate)
+Vue.use(Carousel)
+Vue.use(Spin)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
