@@ -1,6 +1,7 @@
 // eslint-disable-next-line
 import {UserLayout, BasicLayout, RouteView, BlankLayout, PageView} from '@/layouts'
 import {bxAnaalyse} from '@/core/icons'
+import store from "@/store";
 
 export const asyncRouterMap = [
     {
@@ -22,7 +23,7 @@ export const asyncRouterMap = [
                         path: 'hot-Movie',
                         name: 'hotMovie',
                         component: () => import('@/views/movie/conditionPage'),
-                        meta: {title: '热门', keepAlive: true    , permission: ['901']},
+                        meta: {title: '热门', keepAlive: true, permission: ['901']},
                     },
                     {
                         path: 'top-rated',
@@ -36,50 +37,19 @@ export const asyncRouterMap = [
                         component: () => import('@/views/movie/home'),
                         hidden: true,
                     },
+                    {
+                        path: '/movie/detail',
+                        name: 'movieId',
+                        component: () => import('@/views/movie/moviePage'),
+                        hidden: true
+                    },
                 ]
             },
             {
-                path: '/propertymanage',
-                name: 'myFavourite',
-                component: PageView,
-                meta: {title: '我的最爱', keepAlive: true, icon: 'heart', permission: ['221']},
-                redirect: '/propertymanage/property/add',
-                children: [
-                    {
-                        path: '/propertymanage/property/add',
-                        component: RouteView,
-                        meta: {title: '住宅小区', keepAlive: true, icon: 'layout', permission: ['221', '22101']},
-                        redirect: '/propertymanage/property/add',
-                        children: [
-                            {
-                                path: '/propertymanage/property/building',
-                                name: '批量增加住宅',
-                                component: () => import('@/views/propertymanage/property/building'),
-                                meta: {
-                                    title: '批量增加楼宇',
-                                    keepAlive: true,
-                                    permission: ['221', '22101', '2210102']
-                                }
-                            },
-                            {
-                                path: '/propertymanage/property/maintain',
-                                name: '住宅维护',
-                                component: () => import('@/views/propertymanage/property/maintain'),
-                                meta: {
-                                    title: '住宅维护',
-                                    keepAlive: true,
-                                    permission: ['221', '22101', '2210103']
-                                }
-                            },
-                            {
-                                path: '/propertymanage/property/search',
-                                name: '住宅查询',
-                                component: () => import('@/views/propertymanage/property/search'),
-                                meta: {title: '住宅查询', keepAlive: true, permission: ['221', '22101', '2210104']}
-                            }
-                        ]
-                    }
-                ]
+                path: '/myRated/id',
+                name: 'myRated',
+                component: () => import('@/views/movie/ratePage'),
+                meta: {title: '我的评分', keepAlive: true, icon: 'star', permission: ['221']},
             },
             {
                 path: '/lists',
@@ -91,7 +61,7 @@ export const asyncRouterMap = [
                 path: '/watchList',
                 name: 'watchList',
                 component: () => import('@/views/propertymanage/property/search'),
-                meta: {title: '待看清单', keepAlive: true, icon: 'tag', permission: ['221']}
+                meta: {title: '今日推荐', keepAlive: true, icon: 'tag', permission: ['221']}
             },
         ]
     },

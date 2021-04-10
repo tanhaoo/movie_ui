@@ -1,11 +1,11 @@
 <template>
-    <div style="width: 100%">
+    <div class="dashboard" style="width: 100%">
 
         <a-layout>
             <a-layout-header style="background-color: #2d3a4b;height: 63px">
                 <a-row type="flex" style="margin-top: 2px">
                     <a-col :span="12">
-                        <h2 style="color: #fff">MovieDB</h2>
+                        <h2 @click="toDash" style="color: #fff">MovieDB</h2>
                     </a-col>
                     <a-col :span="12">
                         <a-button style="float:right;margin-top: 15px;" type="primary" @click="register">加入我们</a-button>
@@ -38,7 +38,10 @@ export default {
     components: {
         GlobalFooter,
         Home
-    },methods:{
+    }, methods: {
+        toDash() {
+            this.$router.push({name: 'index'})
+        },
         login() {
             this.$router.push({name: 'login'});
         },
@@ -58,21 +61,26 @@ export default {
     font-weight: bold;
 }
 
-p {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #000;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: left;
-    margin-left: 5px
+
+.dashboard {
+    p {
+        font-family: Arial, Helvetica, sans-serif;
+        color: #000;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: left;
+        margin-left: 5px
+    }
+
+    h2 {
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #000;
+        font-size: 36px;
+        font-weight: bold
+    }
 }
 
-h2 {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #000;
-    font-size: 36px;
-    font-weight: bold
-}
 
 span {
     font-family: Arial, Helvetica, sans-serif;

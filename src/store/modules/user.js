@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { welcome } from '@/utils/util'
+import {login, getInfo, logout} from '@/api/login'
+import {ACCESS_TOKEN} from '@/store/mutation-types'
+import {welcome} from '@/utils/util'
 
 const user = {
     state: {
@@ -10,14 +10,15 @@ const user = {
         welcome: '',
         avatar: '',
         roles: [],
-        info: {}
+        info: {},
+        uid: 0
     },
 
     mutations: {
         SET_TOKEN: (state, token) => {
             state.token = token
         },
-        SET_NAME: (state, { name, welcome }) => {
+        SET_NAME: (state, {name, welcome}) => {
             state.name = name
             state.welcome = welcome
         },
@@ -29,20 +30,24 @@ const user = {
         },
         SET_INFO: (state, info) => {
             state.info = info
+        },
+        SET_UID: (state, id) => {
+            state.uid = id
         }
     },
 
     actions: {
         // 登录
-        Login({ commit }, userInfo) {
+        Login({commit}, userInfo) {
             return new Promise((resolve, reject) => {
                 login(userInfo)
                     .then(response => {
                         const result = response.result
-                        console.log('--------'+response)
-                        console.log('token '+result.token)
+                        console.log('--------' + response)
+                        console.log('token ' + result.token)
                         Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
                         commit('SET_TOKEN', result.token)
+                        commit('SET_UID', result.id)
                         resolve()
                     })
                     .catch(error => {
@@ -52,7 +57,7 @@ const user = {
         },
 
         // 获取用户信息
-        getInfo({ commit }) {
+        getInfo({commit}) {
             return new Promise((resolve, reject) => {
                 getInfo()
                     .then(response => {
@@ -77,7 +82,7 @@ const user = {
                             reject(new Error('getInfo: roles must be a non-null array !'))
                         }
 
-                        commit('SET_NAME', { name: result.name, welcome: welcome() })
+                        commit('SET_NAME', {name: result.name, welcome: welcome()})
                         commit('SET_AVATAR', result.avatar)
 
                         resolve(response)
@@ -89,7 +94,7 @@ const user = {
         },
 
         // 登出
-        logout({ commit, state }) {
+        logout({commit, state}) {
             return new Promise(resolve => {
                 logout(state.token)
                     .then(() => {

@@ -21,20 +21,20 @@
                     <user-menu></user-menu>
                 </div>
                 <div v-else :class="['top-nav-header-index', theme]" style="background-color: #2d3a4b">
-                        <div class="header-index-wide">
-                            <div class="header-index-left">
-                                <!--                            <logo class="top-nav-header" :show-title="device !== 'mobile'"/>-->
-                                <h2>MovieDB</h2>
-                                <s-menu style="background-color: #2d3a4b" v-if="device !== 'mobile'" mode="horizontal"
-                                        :menu="menus" :theme="theme"/>
-                                <a-icon
-                                    v-else
-                                    class="trigger"
-                                    :type="collapsed ? 'menu-fold' : 'menu-unfold'"
-                                    @click="toggle"/>
-                            </div>
-                            <user-menu class="header-index-right"></user-menu>
+                    <div class="header-index-wide">
+                        <div class="header-index-left">
+                            <!--                            <logo class="top-nav-header" :show-title="device !== 'mobile'"/>-->
+                            <h2 @click="toDash">MovieDB</h2>
+                            <s-menu style="background-color: #2d3a4b" v-if="device !== 'mobile'" mode="horizontal"
+                                    :menu="menus" :theme="theme"/>
+                            <a-icon
+                                v-else
+                                class="trigger"
+                                :type="collapsed ? 'menu-fold' : 'menu-unfold'"
+                                @click="toggle"/>
                         </div>
+                        <user-menu class="header-index-right"></user-menu>
+                    </div>
                 </div>
             </a-layout-header>
         </div>
@@ -99,6 +99,9 @@ export default {
         console.log(this.isLogin)
     },
     methods: {
+        toDash() {
+            this.$router.push({name: 'index'})
+        },
         handleScroll() {
             if (!this.autoHideHeader) {
                 return
@@ -123,7 +126,14 @@ export default {
     },
     beforeDestroy() {
         document.body.removeEventListener('scroll', this.handleScroll, true)
-    }
+    },
+    watch: {
+        // '$route'(to, from) {
+        //     if (to.name === "myRated") {
+        //         this.$router.push({name: 'myRated', query: {id: "1"}})
+        //     }
+        // }
+    },
 }
 </script>
 
@@ -131,6 +141,7 @@ export default {
 @import '../index.less';
 
 h2 {
+    cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
     color: #fff;
     font-size: 36px;

@@ -12,6 +12,12 @@ const api = {
     oneStep: '/oneStep',
     getMovieByPages: '/movie/getMovieByPages',
     getCurrentRatePeople: '/movie/getCurrentRatePeople',
-    getMovieBySelectStatus: '/movie/getMovieBySelectStatus'
+    getMovieBySelectStatus: '/movie/getMovieBySelectStatus',
+    getMovieById: '/movie/getMovieById',
+    getMovieByRating: '/movie/getMovieByRating',
+    updateRatingByUserId: '/movieRating/updateRatingByUserId',
+    delRatingByUserId:'movieRating/delRatingByUserId',
+    InsertDelMovieList: '/movieList/InsertDelMovieList',
+
 }
 export default api

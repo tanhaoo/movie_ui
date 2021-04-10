@@ -283,10 +283,8 @@ export default {
             let oldQuery = []
             oldQuery = JSON.parse(JSON.stringify(this.selectStatus))
             console.log(oldQuery)
-            // this.$store.commit("SELECT_STATUS", {
-            //     queryCondition: oldQuery
-            // })
             this.$refs.statusHome.loadMovie(oldQuery, 1, [])
+            this.$refs.statusHome.spinning = true
         },
         handleClick(event) {
             // If you don't want click extra trigger collapse, you can prevent this:
@@ -306,15 +304,15 @@ export default {
             return ` 0 - ${value} minutes`;
         },
         handleChange() {
-            this.$notification.error({
-                message: '提示',
-                duration: 3,
-                description: '登录以过滤你观看的影片',
-                placement: 'topLeft'
-            })
+            // this.$notification.error({
+            //     message: '提示',
+            //     duration: 3,
+            //     description: '登录以过滤你观看的影片',
+            //     placement: 'topLeft'
+            // })
+
         },
         onRadioChange(e) {
-            // console.log('radio checked', e.target.value);
             console.log(this.selectStatus.display)
         },
         onSelectDateChange(date, dateString) {

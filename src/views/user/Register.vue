@@ -11,7 +11,7 @@
                             size="large"
                             type="text"
                             placeholder="用户名"
-                            v-decorator="['email', {rules: [{ required: true, type: 'email', message: '请输入用户名' }], validateTrigger: ['change', 'blur']}]"
+                            v-decorator="['email', {rules: [{ required: true, message: '请输入用户名' }], validateTrigger: ['change', 'blur']}]"
                         ></a-input>
                     </a-form-item>
                     <a-popover

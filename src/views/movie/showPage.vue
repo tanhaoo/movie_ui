@@ -2,6 +2,9 @@
     <div class="home">
         <div class="banner">
             <div class="activity-panel">
+                <a-spin :spinning="spinning">
+                    <a-icon slot="indicator" type="loading" style="font-size: 80px" spin />
+                </a-spin>
                 <a-list :grid="{gutter: 1, column: 4 }" :data-source="filmData">
                     <a-list-item style="width: 20%" slot="renderItem" slot-scope="item, index">
                         <div style="background-color: #fff;height:350px;width: 180px;border-radius: 8px;">
@@ -32,7 +35,7 @@
                                     </a-button>
                                 </a-tooltip>
                             </div>
-                            <img :src="item.url" class="i"/>
+                            <img :src="item.url" class="i" @click="toDetail(item.id)"/>
                             <div style="position:absolute;left:10px;margin-top: -17px">
                                 <a-progress class="progress" :strokeWidth=12
                                             :strokeColor="getProgressColor(item.rating/5*100)" type="circle"
@@ -42,7 +45,8 @@
                                     </template>
                                 </a-progress>
                             </div>
-                            <p style="margin-top:25px;font-family: Arial, Helvetica, sans-serif;color: #000;font-size:16px;font-weight: bold;text-align: left;margin-left: 5px">
+                            <p style="margin-top:25px;font-family: Arial, Helvetica, sans-serif;color: #000;font-size:16px;font-weight: bold;text-align: left;margin-left: 5px"
+                               @click="toDetail(item.id)">
                                 {{ item.movieName }}
                                 <!--                                <a-rate :default-value="2.5" v-model="item.movieRating" allow-half disabled/>-->
                             </p>
@@ -61,16 +65,11 @@
 import {getMovieByPages, getMovieBySelectStatus} from "@/api/film";
 import store from "@/store";
 
-const QS = require('qs')
 
 export default {
     name: 'showPage',
     created() {
-        // this.$store.commit("SELECT_STATUS", {
-        //     queryCondition: []
-        // })
         console.log(store.getters.roles.permissionList)
-        // console.log(this.$store.state.selectStatus.queryCondition)
         console.log(this.$route.name)
     },
     data() {
@@ -78,7 +77,8 @@ export default {
             currentPage: 0,
             filmData: [],
             tempData: [],
-            queryCondition: {}
+            queryCondition: {},
+            spinning: true
         }
     },
     methods: {
@@ -102,54 +102,14 @@ export default {
                     this.filmData.push(item)
                 })
                 console.log(result)
+                this.spinning=false
             }).catch(err => {
-
+                this.$notification.error({
+                    message: '失败',
+                    description: 'Failed Loading Movies'
+                })
             })
             this.currentPage++
-            // console.log(this.$store.state.selectStatus.queryCondition.resultSort)
-            // if (this.$store.state.selectStatus.queryCondition.resultSort !== undefined) {
-            //     console.log(JSON.stringify(this.queryCondition))
-            //     console.log(JSON.stringify(this.$store.state.selectStatus.queryCondition))
-            //     this.queryCondition.currentPage = 1
-            //     if (JSON.stringify(this.queryCondition) != JSON.stringify(this.$store.state.selectStatus.queryCondition)) {
-            //         this.currentPage = 2
-            //     } else {
-            //         this.currentPage++;
-            //     }
-            //     this.queryCondition = JSON.parse(JSON.stringify(this.$store.state.selectStatus.queryCondition))
-            //     this.queryCondition.currentPage = this.currentPage
-            // }
-            // if (this.queryCondition.resultSort === undefined) {
-            //     this.currentPage++;
-            //     let parameter = QS.stringify({'currentPage': this.currentPage, 'size': 30})
-            //     getMovieByPages(parameter).then(res => {
-            //         let result = res.result;
-            //         this.currentPage = result.current
-            //         result.records.map(item => {
-            //             filmData.push({
-            //                 movieId: item.id,
-            //                 movieName: item.movieName,
-            //                 movieUrl: item.url,
-            //                 movieRating: item.rating
-            //             })
-            //         })
-            //     }).catch(err => {
-            //         this.$notification.error({
-            //             message: '失败',
-            //             description: 'Failed Loading Movies'
-            //         })
-            //     })
-            // } else {
-            //     console.log("queryCon")
-            //     console.log(this.queryCondition)
-            //     getMovieBySelectStatus(this.queryCondition).then(res => {
-            //         let result = res.result
-            //         console.log(result)
-            //     }).catch(err => {
-            //
-            //     })
-            // }
-            // console.log(this.queryCondition.currentPage + "|page")
         },
         addListClick(value) {
             console.log("list|" + value)
@@ -164,6 +124,9 @@ export default {
                 color = '#21d07a'
             }
             return color
+        },
+        toDetail(id) {
+            this.$router.push({name: 'movieId', query: {id: id}})
         }
     }
 }
@@ -290,18 +253,6 @@ a {
         width: 180px;
         height: 270px;
     }
-
-    //.cover-link {
-    //    cursor: pointer;
-    //    display: block;
-    //    position: absolute;
-    //    top: 0;
-    //    right: 0;
-    //    bottom: 0;
-    //    left: 0;
-    //    z-index: 4;
-    //    background: url(data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEHAAEALAAAAAABAAEAAAICTAEAOw==) repeat;
-    //}
 
     a {
         color: #5079d9;

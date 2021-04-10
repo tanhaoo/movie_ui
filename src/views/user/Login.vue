@@ -177,45 +177,6 @@ export default {
                 }
             })
         },
-        getCaptcha(e) {
-            e.preventDefault()
-            const {
-                form: {validateFields},
-                state
-            } = this
-
-            validateFields(['mobile'], {force: true}, (err, values) => {
-                if (!err) {
-                    state.smsSendBtn = true
-
-                    const interval = window.setInterval(() => {
-                        if (state.time-- <= 0) {
-                            state.time = 60
-                            state.smsSendBtn = false
-                            window.clearInterval(interval)
-                        }
-                    }, 1000)
-
-                    const hide = this.$message.loading('验证码发送中..', 0)
-                    getSmsCaptcha({mobile: values.mobile})
-                        .then(res => {
-                            setTimeout(hide, 2500)
-                            this.$notification['success']({
-                                message: '提示',
-                                description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-                                duration: 8
-                            })
-                        })
-                        .catch(err => {
-                            setTimeout(hide, 1)
-                            clearInterval(interval)
-                            state.time = 60
-                            state.smsSendBtn = false
-                            this.requestFailed(err)
-                        })
-                }
-            })
-        },
         stepCaptchaSuccess() {
             this.loginSuccess()
         },
@@ -227,7 +188,7 @@ export default {
         },
         loginSuccess(res) {
             console.log('res' + res)
-            this.$router.push({path: '/'})
+            this.$router.push({name: 'index'})
             // 延迟 1 秒显示欢迎信息
             setTimeout(() => {
                 this.$notification.success({
