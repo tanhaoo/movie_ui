@@ -207,6 +207,9 @@
 import ShowPage from "@/views/movie/showPage";
 import {getCurrentRatePeople, getMovieBySelectStatus} from "@/api/film";
 import selectStatus from "@/utils/selectStatus";
+import Vue from 'vue'
+import {ACCESS_TOKEN} from "@/store/mutation-types";
+
 
 export default {
     components: {ShowPage},
@@ -261,6 +264,7 @@ export default {
                 0: '0', 100: '100', 200: '200', 300: '300', 400: '400'
             },
             selectStatus: {
+                userId: Vue.ls.get(ACCESS_TOKEN),
                 resultSort: "hotDrops",
                 //显示状态 1 全部 2未观看 3 已观看
                 display: 1,

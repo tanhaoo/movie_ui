@@ -42,7 +42,7 @@ export const asyncRouterMap = [
                         name: 'movieId',
                         component: () => import('@/views/movie/moviePage'),
                         hidden: true
-                    },
+                    }
                 ]
             },
             {
@@ -52,16 +52,28 @@ export const asyncRouterMap = [
                 meta: {title: '我的评分', keepAlive: true, icon: 'star', permission: ['221']},
             },
             {
-                path: '/lists',
-                name: 'lists',
-                component: () => import('@/views/propertymanage/property/search'),
-                meta: {title: '我的收藏', keepAlive: true, icon: 'unordered-list', permission: ['221']}
+                path: '/list/listPage',
+                name: 'listPage',
+                component: () => import('@/views/list/listPage'),
+                meta: {title: '我的收藏列表', keepAlive: true, icon: 'unordered-list', permission: ['221']},
             },
             {
-                path: '/watchList',
-                name: 'watchList',
-                component: () => import('@/views/propertymanage/property/search'),
-                meta: {title: '今日推荐', keepAlive: true, icon: 'tag', permission: ['221']}
+                path: '/list/newList',
+                name: 'newList',
+                component: () => import('@/views/list/newList'),
+                hidden: true
+            },
+            {
+                path: '/list/listDetail',
+                name: 'listDetail',
+                component: () => import('@/views/list/listDetail'),
+                hidden: true
+            },
+            {
+                path: '/recommend',
+                name: 'recommend',
+                component: () => import('@/views/recommend/recommendPage'),
+                meta: {title: '我的推荐', keepAlive: true, icon: 'tag', permission: ['221']}
             },
         ]
     },
@@ -86,17 +98,17 @@ export const constantRouterMap = [
             {
                 path: 'login',
                 name: 'login',
-                component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
+                component: () => import(/* webpackChunkName: "user" */ '@/views/user/login')
             },
             {
                 path: 'register',
                 name: 'register',
-                component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
+                component: () => import(/* webpackChunkName: "user" */ '@/views/user/register')
             },
             {
                 path: 'register-result',
                 name: 'registerResult',
-                component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
+                component: () => import(/* webpackChunkName: "user" */ '@/views/user/registerResult')
             },
             {
                 path: 'recover',

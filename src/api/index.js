@@ -16,8 +16,16 @@ const api = {
     getMovieById: '/movie/getMovieById',
     getMovieByRating: '/movie/getMovieByRating',
     updateRatingByUserId: '/movieRating/updateRatingByUserId',
-    delRatingByUserId:'movieRating/delRatingByUserId',
+    delRatingByUserId: 'movieRating/delRatingByUserId',
     InsertDelMovieList: '/movieList/InsertDelMovieList',
-
+    getMovieByKeyWord: '/movie/getMovieByKeyWord',
+    InsertMovieLists: '/movieList/InsertMovieLists',
+    getUserMovieListCount: '/movieList/getUserMovieListCount',
+    getMovieListByUserId: '/movieList/getMovieListByUserId',
+    getMovieByUserRecommend: '/movie/getMovieByUserRecommend',
+    updateMovieList: '/movieList/updateMovieList',
+    deleteMovieList: '/movieList/deleteMovieList',
+    getMovieListNameByUserId: '/movieList/getMovieListNameByUserId',
+    insertMovieToList: '/movieList/insertMovieToList'
 }
 export default api

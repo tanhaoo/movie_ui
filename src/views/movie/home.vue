@@ -3,15 +3,38 @@
         <h2 style="font-family: Arial, Helvetica, sans-serif;color: #000;font-size:36px;font-weight: bold">
             欢迎。</h2>
         <h3>这里有海量的电影、剧集和人物等你来发现。快来探索吧！</h3>
-        <a-input-search
-            style="height: 80px"
-            placeholder="搜索电影、编剧、导演、明星...."
-            :loading="loading"
-            enter-button="Search"
+        <a-select
             size="large"
-            @search="onSearch"
-        />
-        <div v-for="item in allData">
+            show-search
+            placeholder="搜索电影、编剧、导演、明星...."
+            :value="value"
+            style="width: 1050px;"
+            :default-active-first-option="false"
+            :show-arrow="false"
+            :filter-option="false"
+            :not-found-content="null"
+            :loading="isLoading"
+            @search="handleSearch"
+            @change="handleChange"
+        >
+            <a-select-option v-for="item in filmData" :key="item.id">
+                <a-row type="flex">
+                    <a-col :flex="1"><img style="height: 120px;width: 80px" :src="item.url"></a-col>
+                    <a-col :flex="1">
+                        <a-row type="flex">
+                            <a-col :flex="1">
+                                <div style="margin-left: 10px">
+                                    <h2 style="font-size: 25px">{{ item.movieName }}</h2>
+                                    <h2 style="font-size:15px">{{ item.genre }}</h2>
+                                </div>
+                            </a-col>
+                        </a-row>
+                    </a-col>
+                </a-row>
+            </a-select-option>
+        </a-select>
+
+        <div style="margin-top: 60px" v-for="item in allData">
             <h3 style="font-size: 20px">{{ item.title }}</h3>
             <a-carousel arrows>
                 <div
@@ -25,6 +48,9 @@
                 <div slot="nextArrow" slot-scope="props" class="custom-slick-arrow" style="right: 6px">
                     <a-icon type="right-circle"/>
                 </div>
+                <a-spin v-if="spinning" :spinning="spinning">
+                    <a-icon slot="indicator" type="loading" style="font-size: 80px" spin/>
+                </a-spin>
                 <div>
                     <a-list :grid="{gutter: 1, column: 4 }" :data-source="item.data[0]">
                         <a-list-item style="width: 16%;" slot="renderItem" slot-scope="item, index">
@@ -279,11 +305,14 @@
                                                             <h2 style="color: #fff" @click="createList(item.id)">
                                                                 +创建收藏清单
                                                             </h2>
-                                                            <a-select default-value="a1"
-                                                                      style="width: 200px">
-                                                                <a-select-option v-for="i in 25"
-                                                                                 :key="(i + 9).toString(36) + i">
-                                                                    {{ (i + 9).toString(36) + i }}
+                                                            <a-select
+                                                                style="width: 200px"
+                                                                default-value="请选择收藏列表"
+                                                                @change="selectChange">
+                                                                <a-select-option v-for="(selectItem,index) in listData"
+                                                                                 :key="selectItem.listName"
+                                                                >
+                                                                    {{ selectItem.listName }}
                                                                 </a-select-option>
                                                             </a-select>
                                                         </template>
@@ -363,23 +392,64 @@
 
 <script>
 import store from "@/store";
-import {getMovieBySelectStatus} from "@/api/film";
+import {getMovieByKeyWord, getMovieBySelectStatus, getMovieListNameByUserId, insertMovieToList} from "@/api/film";
+import Vue from 'vue'
+import {ACCESS_TOKEN} from "@/store/mutation-types";
 
+let timeout;
+
+function fetch(value, callback) {
+    if (timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+    }
+
+    function fake() {
+        getMovieByKeyWord(QS.stringify({keyword: value})).then(res => {
+            let result = res.result
+            callback(result);
+        }).catch(err => {
+            this.$notification.error({
+                message: 'error',
+                description: "Loading Films Failed"
+            })
+        })
+    }
+
+    timeout = setTimeout(fake, 300);
+}
+
+const QS = require('qs')
 export default {
     name: "Home",
     created() {
         if (store.getters.roles.permissionList != undefined)
             store.getters.roles.permissionList.map(item => {
-                if (item == '901')
+                if (item == '901') {
                     this.isLogin = true;
+                    getMovieListNameByUserId({userId: this.token}).then(res => {
+                        let result = res.result
+                        console.log(result)
+                        result.map(item => {
+                            this.listData.push(JSON.parse(JSON.stringify(item)))
+                        })
+                    }).catch(err => {
+
+                    })
+                }
             })
         this.getMovieShow()
         console.log(this.allData)
     },
     data() {
         return {
-            loading: false,
+            token: Vue.ls.get(ACCESS_TOKEN),
+            listData: [],
+            value: undefined,
+            filmData: [],
+            movieId: [],
             hotDropsStatus: {
+                userId: Vue.ls.get(ACCESS_TOKEN),
                 resultSort: "hotDrops",
                 //显示状态 1 全部 2未观看 3 已观看
                 display: 1,
@@ -391,6 +461,7 @@ export default {
                 size: 30
             },
             rateDropsStatus: {
+                userId: Vue.ls.get(ACCESS_TOKEN),
                 resultSort: "rateDrops",
                 //显示状态 1 全部 2未观看 3 已观看
                 display: 1,
@@ -406,6 +477,7 @@ export default {
             rateData: [],
             firstShow: [],
             isLogin: false,
+            isLoading: false,
             allData: [
                 {
                     "title": '热门',
@@ -415,10 +487,59 @@ export default {
                     "title": "趋势",
                     "data": []
                 }
-            ]
+            ],
+            newList: {
+                userId: this.token,
+                listName: '',
+                movieId: ''
+            },
+            spinning: true
         }
     },
     methods: {
+        selectChange(value) {
+            this.newList.listName = value
+            this.newList.userId = this.token
+            console.log(this.newList)
+            insertMovieToList(this.newList).then(res => {
+                if (res.result.search('成功') !== -1) {
+                    this.$notification.success({
+                        message: '成功',
+                        description: res.result
+                    })
+                } else {
+                    this.$notification.error({
+                        message: '失败',
+                        description: res.result
+                    })
+                }
+            }).catch(err => {
+                this.$notification.error({
+                    message: '失败',
+                    description: 'Failed Loading Movies'
+                })
+            })
+        },
+        handleSearch(val) {
+            if (val != '') {
+                this.isLoading = true
+                fetch(val, data => {
+                    console.log(data)
+                    this.filmData = data
+                    this.isLoading = false
+                })
+            }
+        },
+        handleChange(val) {
+            console.log('change ' + val)
+            this.value = val.movieName
+            this.filmData.map(item => {
+                if (item.id === val) {
+                    this.value = item.movieName
+                }
+            })
+            this.$router.push({name: 'movieId', query: {id: val}})
+        },
         toDetail(id) {
             this.$router.push({name: 'movieId', query: {id: id}})
         },
@@ -429,18 +550,11 @@ export default {
             this.$router.push({name: 'register'});
         },
         addListClick(value) {
-            console.log("list|" + value)
+            this.newList.movieId = value
+            console.log(this.newList)
         },
         addHeartClick(value) {
             console.log(this.isLogin)
-        },
-        onSearch(value) {
-            this.loading = true
-            console.log(value);
-            setTimeout(() => {
-                console.log(1)
-                this.loading = false
-            }, 1000)
         },
         getMovieShow() {
             getMovieBySelectStatus(this.hotDropsStatus).then(res => {
@@ -462,6 +576,8 @@ export default {
                         current++;
                     }
                 })
+                console.log(this.allData)
+                this.spinning = false
             }).catch(err => {
                 this.$notification.error({
                     message: '失败',
@@ -507,6 +623,7 @@ export default {
         },
         createList(val) {
             console.log(val)
+            this.$router.push({name: 'newList'})
         }
     },
 }

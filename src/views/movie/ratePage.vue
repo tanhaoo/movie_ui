@@ -1,6 +1,9 @@
 <template>
     <div class="ratePage">
-        <h2>我的评分</h2>
+        <h2 style="font-size: 25px">我的评分</h2>
+        <a-spin :spinning="spinning">
+            <a-icon slot="indicator" type="loading" style="font-size: 80px" spin/>
+        </a-spin>
         <a-list item-layout="horizontal" :data-source="filmData">
             <a-list-item style="height: 200px;margin-top: 35px" slot="renderItem" slot-scope="item, index">
                 <a-row type="flex">
@@ -28,7 +31,7 @@
                                 </a-col>
                             </a-row>
                             <h2 style="width: 1000px;font-size: 20px;  font-weight: lighter;">{{ item.introduce }}</h2>
-                            <div >
+                            <div>
                                 <a-row type="flex">
                                     <a-col :flex="1">
                                         <a-tooltip trigger="click"
@@ -53,7 +56,7 @@
                                                   @click="changeMyHeart(item.id)">
                                             <a-icon type="heart" theme="filled"/>
                                         </a-button>
-                                        <span :style="item.spanStyle" class="rate">{{ item.listName }}</span>
+                                        <span class="rate">{{ item.listName }}</span>
                                     </a-col>
                                     <a-col :flex="1" style="margin-left: 15px">
                                         <a-popconfirm
@@ -103,7 +106,7 @@ export default {
             maxPage: 99,
             currentRating: 2.5,
             heart: '添加至我的最爱',
-            spanStyle: ""
+            spinning: true
         }
     },
     methods: {
@@ -127,13 +130,14 @@ export default {
                     result.records.map(item => {
                         if (item.movieList != null) {
                             if (item.movieList.listName == "我的最爱") {
-                                item.spanStyle = "color:#faad14;"
+                                item.spanStyle = "color:#dd56b2;"
                                 item.listName = "我的最爱"
                             } else
                                 item.listName = "添加至我的最爱"
                         } else
                             item.listName = "添加至我的最爱"
                         this.filmData.push(JSON.parse(JSON.stringify(item)))
+                        this.spinning = false
                     })
                     this.currentPage++;
                 }).catch(err => {
@@ -171,7 +175,7 @@ export default {
                 this.filmData.map(item => {
                     if (item.id == val)
                         if (result == "已添加至我的最爱") {
-                            item.spanStyle = "color:#faad14;"
+                            item.spanStyle = "color:#dd56b2;"
                             item.listName = '我的最爱'
                         } else {
                             item.spanStyle = ""
@@ -218,6 +222,7 @@ export default {
 
 <style lang="scss" rel="stylesheet/scss">
 .ratePage {
+    margin-left: 6%;
 
     h2 {
         font-family: Arial, Helvetica, sans-serif;

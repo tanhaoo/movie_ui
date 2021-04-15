@@ -81,7 +81,7 @@ const vueConfig = {
                         // 'primary-color': '#F5222D',
                         // 'link-color': '#F5222D',
                         // 'border-radius-base': '2px'
-                        'primary-color': '#FAAD14', // 全局主色
+                        'primary-color': '#1885d0', // 全局主色
                         'link-color': '#1890ff', // 链接色
                         'success-color': '#52c41a', // 成功色
                         'warning-color': '#faad14', // 警告色
