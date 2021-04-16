@@ -55,9 +55,9 @@
                 </div>
             </div>
         </div>
-        <div style="height: 105px;width:120%;background-color: #f0f2f5;margin-left: -25px;">
+        <div style="height: 105px;width:100%;background-color: #f0f2f5;">
             <div style="margin-left: 6.5%;padding-top:1.5%;">
-                <a-list :grid="{gutter: 1, column: 4 }" :data-source="filmData">
+                <a-list :grid="{gutter: 16, column: 4 }" :data-source="filmData">
                     <a-list-item style="width: 16%" slot="renderItem" slot-scope="item, index">
                         <img class="showImg"
                              :src="item.url"

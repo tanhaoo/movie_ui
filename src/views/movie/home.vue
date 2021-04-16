@@ -34,7 +34,7 @@
             </a-select-option>
         </a-select>
 
-        <div style="margin-top: 60px" v-for="item in allData">
+        <div style="margin-top: 60px" v-for="(item,index) in allData">
             <h3 style="font-size: 20px">{{ item.title }}</h3>
             <a-carousel arrows>
                 <div
@@ -51,244 +51,8 @@
                 <a-spin v-if="spinning" :spinning="spinning">
                     <a-icon slot="indicator" type="loading" style="font-size: 80px" spin/>
                 </a-spin>
-                <div>
-                    <a-list :grid="{gutter: 1, column: 4 }" :data-source="item.data[0]">
-                        <a-list-item style="width: 16%;" slot="renderItem" slot-scope="item, index">
-                            <div
-                                style="height:330px;width: 160px;border-radius: 8px;margin-left: 42px;margin-top: 20px;background-color: #fff">
-                                <div style="position:absolute;right:-10px;">
-                                    <a-tooltip overlayClassName="tooltip" trigger="click"
-                                               placement="bottom">
-                                        <template slot="title">
-                                            <a-list v-if="isLogin" item-layout="horizontal">
-                                                <a-list-item>
-                                                    <a @click="addListClick(item.id)">
-                                                        <a-icon type="bars"/>
-                                                        添加到收藏清单</a>
-                                                </a-list-item>
-                                                <a-list-item>
-                                                    <a @click="addHeartClick(item.id)">
-                                                        <a-icon type="heart" theme="filled"/>
-                                                        我的最爱</a>
-                                                </a-list-item>
-                                                <a-list-item>
-                                                    <a-tooltip trigger="click"
-                                                               placement="bottom">
-                                                        <template slot="title">
-                                                            <a-rate :default-value="2.5" allow-half/>
-                                                            <br>
-                                                            <a-button style="width: 100%" type="primary">确认
-                                                            </a-button>
-                                                        </template>
-                                                        <a>
-                                                            <a-icon type="star" theme="filled"/>
-                                                            你的评分</a>
-                                                    </a-tooltip>
-                                                </a-list-item>
-                                            </a-list>
-                                            <a-list v-else item-layout="horizontal">
-                                                <span style="color: #000">想对此项目评分或将其添加到清单中？</span>
-                                                <a-list-item>
-                                                    <a-button type="primary" style="width: 70%"
-                                                              @click="login">登录
-                                                    </a-button>
-                                                </a-list-item>
-                                                <span style="color: #000">不是会员？</span>
-                                                <a-list-item>
-                                                    <a-button type="primary" style="width: 70%"
-                                                              @click="register">注册
-                                                    </a-button>
-                                                </a-list-item>
-                                            </a-list>
-                                        </template>
-                                        <a-button ghost type="link">
-                                            <a-icon style="font-size: 18px;margin-top: 5px"
-                                                    type="down-circle"
-                                                    theme="filled"/>
-                                        </a-button>
-                                    </a-tooltip>
-                                </div>
-                                <img class="showImg"
-                                     :src="item.url"
-                                     @click="toDetail(item.id)"/>
-                                <div style="position:absolute;left:50px;margin-top: -17px">
-                                    <a-progress class="progress" :strokeWidth=12
-                                                :strokeColor="getProgressColor(item.rating/5*100)"
-                                                type="circle"
-                                                :percent="(item.rating/5*100)" :width="40">
-                                        <template #format="percent">
-                                                    <span style="color:#979A9A;font-size: 15px;font-weight: bold">{{
-                                                            Number(percent).toFixed(0)
-                                                        }}%</span>
-                                        </template>
-                                    </a-progress>
-                                </div>
-                                <p style="margin-top: 20px" @click="toDetail(item.id)">
-                                    {{ item.movieName }}
-                                </p>
-                            </div>
-                        </a-list-item>
-                    </a-list>
-                </div>
-                <div>
-                    <a-list :grid="{gutter: 1, column: 4 }" :data-source="item.data[1]">
-                        <a-list-item style="width: 16%" slot="renderItem" slot-scope="item, index">
-                            <div
-                                style="height:330px;width: 160px;border-radius: 8px;margin-left: 42px;margin-top: 20px;background-color: #fff">
-                                <div style="position:absolute;right:-10px;">
-                                    <a-tooltip overlayClassName="tooltip" trigger="click"
-                                               placement="bottom">
-                                        <template slot="title">
-                                            <a-list v-if="isLogin" item-layout="horizontal">
-                                                <a-list-item>
-                                                    <a @click="addListClick(item.id)">
-                                                        <a-icon type="bars"/>
-                                                        添加到收藏清单</a>
-                                                </a-list-item>
-                                                <a-list-item>
-                                                    <a @click="addHeartClick(item.id)">
-                                                        <a-icon type="heart" theme="filled"/>
-                                                        我的最爱</a>
-                                                </a-list-item>
-                                                <a-list-item>
-                                                    <a-tooltip trigger="click"
-                                                               placement="bottom">
-                                                        <template slot="title">
-                                                            <a-rate :default-value="2.5" allow-half/>
-                                                            <br>
-                                                            <a-button style="width: 100%" type="primary">确认
-                                                            </a-button>
-                                                        </template>
-                                                        <a>
-                                                            <a-icon type="star" theme="filled"/>
-                                                            你的评分</a>
-                                                    </a-tooltip>
-                                                </a-list-item>
-                                            </a-list>
-                                            <a-list v-else item-layout="horizontal">
-                                                <span style="color: #000">想对此项目评分或将其添加到清单中？</span>
-                                                <a-list-item>
-                                                    <a-button type="primary" style="width: 70%"
-                                                              @click="login">登录
-                                                    </a-button>
-                                                </a-list-item>
-                                                <span style="color: #000">不是会员？</span>
-                                                <a-list-item>
-                                                    <a-button type="primary" style="width: 70%"
-                                                              @click="register">注册
-                                                    </a-button>
-                                                </a-list-item>
-                                            </a-list>
-                                        </template>
-                                        <a-button ghost type="link">
-                                            <a-icon style="font-size: 18px;margin-top: 5px"
-                                                    type="down-circle"
-                                                    theme="filled"/>
-                                        </a-button>
-                                    </a-tooltip>
-                                </div>
-                                <img class="showImg"
-                                     :src="item.url"
-                                     @click="toDetail(item.id)"/>
-                                <div style="position:absolute;left:50px;margin-top: -17px">
-                                    <a-progress class="progress" :strokeWidth=12
-                                                :strokeColor="getProgressColor(item.rating/5*100)"
-                                                type="circle"
-                                                :percent="(item.rating/5*100)" :width="40">
-                                        <template #format="percent">
-                                                    <span style="color:#979A9A;font-size: 15px;font-weight: bold">{{
-                                                            Number(percent).toFixed(0)
-                                                        }}%</span>
-                                        </template>
-                                    </a-progress>
-                                </div>
-                                <p style="margin-top: 20px" @click="toDetail(item.id)">
-                                    {{ item.movieName }}
-                                </p>
-                            </div>
-                        </a-list-item>
-                    </a-list>
-                </div>
-                <div>
-                    <a-list :grid="{gutter: 1, column: 4 }" :data-source="item.data[2]">
-                        <a-list-item style="width: 16%" slot="renderItem" slot-scope="item, index">
-                            <div
-                                style="height:330px;width: 160px;border-radius: 8px;margin-left: 42px;margin-top: 20px;background-color: #fff">
-                                <div style="position:absolute;right:-10px;">
-                                    <a-tooltip overlayClassName="tooltip" trigger="click"
-                                               placement="bottom">
-                                        <template slot="title">
-                                            <a-list v-if="isLogin" item-layout="horizontal">
-                                                <a-list-item>
-                                                    <a @click="addListClick(item.id)">
-                                                        <a-icon type="bars"/>
-                                                        添加到收藏清单</a>
-                                                </a-list-item>
-                                                <a-list-item>
-                                                    <a @click="addHeartClick(item.id)">
-                                                        <a-icon type="heart" theme="filled"/>
-                                                        我的最爱</a>
-                                                </a-list-item>
-                                                <a-list-item>
-                                                    <a-tooltip trigger="click"
-                                                               placement="bottom">
-                                                        <template slot="title">
-                                                            <a-rate :default-value="2.5" allow-half/>
-                                                            <br>
-                                                            <a-button style="width: 100%" type="primary">确认
-                                                            </a-button>
-                                                        </template>
-                                                        <a>
-                                                            <a-icon type="star" theme="filled"/>
-                                                            你的评分</a>
-                                                    </a-tooltip>
-                                                </a-list-item>
-                                            </a-list>
-                                            <a-list v-else item-layout="horizontal">
-                                                <span style="color: #000">想对此项目评分或将其添加到清单中？</span>
-                                                <a-list-item>
-                                                    <a-button type="primary" style="width: 70%"
-                                                              @click="login">登录
-                                                    </a-button>
-                                                </a-list-item>
-                                                <span style="color: #000">不是会员？</span>
-                                                <a-list-item>
-                                                    <a-button type="primary" style="width: 70%"
-                                                              @click="register">注册
-                                                    </a-button>
-                                                </a-list-item>
-                                            </a-list>
-                                        </template>
-                                        <a-button ghost type="link">
-                                            <a-icon style="font-size: 18px;margin-top: 5px"
-                                                    type="down-circle"
-                                                    theme="filled"/>
-                                        </a-button>
-                                    </a-tooltip>
-                                </div>
-                                <img class="showImg"
-                                     :src="item.url" @click="toDetail(item.id)"/>
-                                <div style="position:absolute;left:50px;margin-top: -17px">
-                                    <a-progress class="progress" :strokeWidth=12
-                                                :strokeColor="getProgressColor(item.rating/5*100)"
-                                                type="circle"
-                                                :percent="(item.rating/5*100)" :width="40">
-                                        <template #format="percent">
-                                                    <span style="color:#979A9A;font-size: 15px;font-weight: bold">{{
-                                                            Number(percent).toFixed(0)
-                                                        }}%</span>
-                                        </template>
-                                    </a-progress>
-                                </div>
-                                <p style="margin-top: 20px;" @click="toDetail(item.id)">
-                                    {{ item.movieName }}
-                                </p>
-                            </div>
-                        </a-list-item>
-                    </a-list>
-                </div>
-                <div>
-                    <a-list :grid="{gutter: 1, column: 4 }" :data-source="item.data[3]">
+                <div v-for="(it,ind) in item.data" @click="getIndex(index,ind)">
+                    <a-list :grid="{gutter: 1, column: 4 }" :data-source="it">
                         <a-list-item style="width: 16%" slot="renderItem" slot-scope="item, index">
                             <div
                                 style="height:330px;width: 160px;border-radius: 8px;margin-left: 42px;margin-top: 20px;background-color: #fff">
@@ -322,17 +86,18 @@
                                                     </a-tooltip>
                                                 </a-list-item>
                                                 <a-list-item>
-                                                    <a @click="addHeartClick(item.id)">
-                                                        <a-icon type="heart" theme="filled"/>
+                                                    <a @click="changeMyHeart(item.id)">
+                                                        <a-icon :style="item.spanStyle" type="heart" theme="filled"/>
                                                         我的最爱</a>
                                                 </a-list-item>
                                                 <a-list-item>
                                                     <a-tooltip trigger="click"
                                                                placement="bottom">
                                                         <template slot="title">
-                                                            <a-rate :default-value="2.5" allow-half/>
+                                                            <a-rate v-model="item.userRating" allow-half/>
                                                             <br>
-                                                            <a-button style="width: 100%" type="primary">确认
+                                                            <a-button style="width: 100%" type="primary"
+                                                                      @click="updateRating(item.id, item.userRating)">确认
                                                             </a-button>
                                                         </template>
                                                         <a>
@@ -392,7 +157,13 @@
 
 <script>
 import store from "@/store";
-import {getMovieByKeyWord, getMovieBySelectStatus, getMovieListNameByUserId, insertMovieToList} from "@/api/film";
+import {
+    getMovieByKeyWord,
+    getMovieBySelectStatus,
+    getMovieListNameByUserId, InsertDelMovieList,
+    insertMovieToList,
+    updateRatingByUserId
+} from "@/api/film";
 import Vue from 'vue'
 import {ACCESS_TOKEN} from "@/store/mutation-types";
 
@@ -443,6 +214,8 @@ export default {
     },
     data() {
         return {
+            titleIndex: 0,
+            pageIndex: 0,
             token: Vue.ls.get(ACCESS_TOKEN),
             listData: [],
             value: undefined,
@@ -493,10 +266,30 @@ export default {
                 listName: '',
                 movieId: ''
             },
-            spinning: true
+            spinning: true,
         }
     },
     methods: {
+        getIndex(index, ind) {
+            this.titleIndex = index
+            this.pageIndex = ind
+        },
+        updateRating(mid, val) {
+            updateRatingByUserId(QS.stringify({uid: this.token, mid: mid, rating: val})).then(res => {
+                let result = res.result
+                if (result == true)
+                    this.$notification.success({
+                        message: '成功',
+                        description: '更新评分成功'
+                    })
+            }).catch(err => {
+                this.$notification.error({
+                    message: '失败',
+                    description: '更新评分失败'
+                })
+                this.currentPage = 1;
+            })
+        },
         selectChange(value) {
             this.newList.listName = value
             this.newList.userId = this.token
@@ -538,10 +331,22 @@ export default {
                     this.value = item.movieName
                 }
             })
-            this.$router.push({name: 'movieId', query: {id: val}})
+            if (!this.isLogin)
+                this.$notification.error({
+                    message: '失败',
+                    description: '请先登录后操作'
+                })
+            else
+                this.$router.push({name: 'movieId', query: {id: val}})
         },
         toDetail(id) {
-            this.$router.push({name: 'movieId', query: {id: id}})
+            if (!this.isLogin)
+                this.$notification.error({
+                    message: '失败',
+                    description: '请先登录后操作'
+                })
+            else
+                this.$router.push({name: 'movieId', query: {id: id}})
         },
         login() {
             this.$router.push({name: 'login'});
@@ -553,23 +358,35 @@ export default {
             this.newList.movieId = value
             console.log(this.newList)
         },
-        addHeartClick(value) {
-            console.log(this.isLogin)
-        },
         getMovieShow() {
             getMovieBySelectStatus(this.hotDropsStatus).then(res => {
                 let result = res.result
                 let current = 0
                 let flag = 0
                 this.firstShow = []
-                this.showData = JSON.parse(JSON.stringify(result.records))
-                this.showData.map((item, index) => {
+                result.records.map((item, index) => {
+                    if (item.movieList != null) {
+                        if (item.movieList.listName == "我的最爱") {
+                            item.spanStyle = "color:#dd56b2;"
+                        } else {
+                            item.spanStyle = ""
+                        }
+                    } else {
+                        item.spanStyle = ""
+                    }
+                    if (item.movieRating != null) {
+                        if (item.movieRating.rating != null)
+                            item.userRating = item.movieRating.rating
+                        else item.userRating = 0
+                    } else
+                        item.userRating = 0
+
                     if (flag == current)
-                        this.firstShow.push(item)
+                        this.firstShow.push(JSON.parse(JSON.stringify(item)))
                     else {
                         flag++;
                         this.firstShow = []
-                        this.firstShow.push(item)
+                        this.firstShow.push(JSON.parse(JSON.stringify(item)))
                     }
                     if (index % 6 == 5) {
                         this.allData[0].data.push(JSON.parse(JSON.stringify(this.firstShow)))
@@ -589,17 +406,32 @@ export default {
                 let current = 0
                 let flag = 0
                 this.firstShow = []
-                this.showData = JSON.parse(JSON.stringify(result.records))
-                this.showData.map((item, index) => {
+                result.records.map((item, index) => {
+                    if (item.movieList != null) {
+                        if (item.movieList.listName == "我的最爱") {
+                            item.spanStyle = "color:#dd56b2;"
+                        } else {
+                            item.spanStyle = ""
+                        }
+                    } else {
+                        item.spanStyle = ""
+                    }
+                    if (item.movieRating != null) {
+                        if (item.movieRating.rating != null)
+                            item.userRating = item.movieRating.rating
+                        else item.userRating = 0
+                    } else
+                        item.userRating = 0
+
                     if (flag == current)
-                        this.firstShow.push(item)
+                        this.firstShow.push(JSON.parse(JSON.stringify(item)))
                     else {
                         flag++;
                         this.firstShow = []
-                        this.firstShow.push(item)
+                        this.firstShow.push(JSON.parse(JSON.stringify(item)))
                     }
                     if (index % 6 == 5) {
-                        this.allData[1].data.push(JSON.parse(JSON.stringify(this.firstShow)))
+                        this.allData[1].data.push(this.firstShow)
                         current++;
                     }
                 })
@@ -624,6 +456,28 @@ export default {
         createList(val) {
             console.log(val)
             this.$router.push({name: 'newList'})
+        },
+        changeMyHeart(val) {
+            InsertDelMovieList({userId: this.token, movieId: val, listName: "我的最爱"}).then(res => {
+                let result = res.result
+                this.$notification.success({
+                    message: '成功',
+                    description: result
+                })
+                this.allData[this.titleIndex].data[this.pageIndex].map(item => {
+                    if (item.id == val)
+                        if (result == "已添加至我的最爱") {
+                            item.spanStyle = "color:#dd56b2;"
+                        } else {
+                            item.spanStyle = ""
+                        }
+                })
+            }).catch(error => {
+                this.$notification.error({
+                    message: 'error',
+                    description: "操作失败"
+                })
+            })
         }
     },
 }

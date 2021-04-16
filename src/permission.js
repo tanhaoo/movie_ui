@@ -71,3 +71,27 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
     NProgress.done() // finish progress bar
 })
+
+if (store.getters.roles.length === 0) {
+    store.dispatch('getInfo').then(res => {
+        const roles = res.result && res.result.role
+        console.dir(roles)
+        store.dispatch('GenerateRoutes', {roles}).then(() => {
+            router.addRoutes(store.getters.addRouters)
+            const redirect = decodeURIComponent(from.query.redirect || to.path)
+            if (to.path === redirect) {
+                next({...to, replace: true})
+            } else {
+                next({path: redirect})
+            }
+        })
+    }).catch(() => {
+        notification.error({
+            message: '错误',
+            description: '请求用户信息失败，请重试'
+        })
+        store.dispatch('logout').then(() => {
+            next({name: 'dashboard'})
+        })
+    })
+}

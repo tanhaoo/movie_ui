@@ -36,26 +36,26 @@
                 </a-collapse>
                 <a-collapse v-model="activeKey" :expand-icon-position="'right'" class="shadow">
                     <a-collapse-panel key="2" header="筛选" :style="customStyle">
-                        <p>显示
-                            <a-tooltip placement="right">
-                                <template slot="title">
-                                    登录以过滤你观看的影片
-                                </template>
-                                <a-icon type="question-circle"/>
-                            </a-tooltip>
-                        </p>
-                        <a-radio-group v-model="selectStatus.display" @change="onRadioChange">
-                            <a-radio :style="radioStyle" :value="1">
-                                全部
-                            </a-radio>
-                            <a-radio :style="radioStyle" :value="2">
-                                未观看的电影
-                            </a-radio>
-                            <a-radio :style="radioStyle" :value="3">
-                                已观看的电影
-                            </a-radio>
-                        </a-radio-group>
-                        <hr align=left width=300 color=#d9d9d9 size=1/>
+<!--                        <p>显示-->
+<!--                            <a-tooltip placement="right">-->
+<!--                                <template slot="title">-->
+<!--                                    登录以过滤你观看的影片-->
+<!--                                </template>-->
+<!--                                <a-icon type="question-circle"/>-->
+<!--                            </a-tooltip>-->
+<!--                        </p>-->
+<!--                        <a-radio-group v-model="selectStatus.display" @change="onRadioChange">-->
+<!--                            <a-radio :style="radioStyle" :value="1">-->
+<!--                                全部-->
+<!--                            </a-radio>-->
+<!--                            <a-radio :style="radioStyle" :value="2">-->
+<!--                                未观看的电影-->
+<!--                            </a-radio>-->
+<!--                            <a-radio :style="radioStyle" :value="3">-->
+<!--                                已观看的电影-->
+<!--                            </a-radio>-->
+<!--                        </a-radio-group>-->
+<!--                        <hr align=left width=300 color=#d9d9d9 size=1/>-->
                         <p>类型</p>
                         <a-checkbox-group @change="onCheckChange">
                             <a-row>

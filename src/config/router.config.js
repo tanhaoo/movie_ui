@@ -11,7 +11,6 @@ export const asyncRouterMap = [
         meta: {title: '首页'},
         redirect: '/movie/home',
         children: [
-            // dashboard
             {
                 path: 'movie',
                 name: 'movie',
