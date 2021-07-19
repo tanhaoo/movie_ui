@@ -20,9 +20,9 @@ export function login(parameter) {
     })
 }
 
-export function getSmsCaptcha(parameter) {
+export function register(parameter) {
     return axios({
-        url: api.SendSms,
+        url: api.register,
         method: 'post',
         data: parameter
     })
@@ -62,6 +62,22 @@ export function logout() {
 export function get2step(parameter) {
     return axios({
         url: api.twoStepCode,
+        method: 'post',
+        data: parameter
+    })
+}
+
+export function uploadImage(parameter) {
+    return axios({
+        url: api.uploadImage,
+        method: 'post',
+        data: parameter
+    })
+}
+
+export function updateUserByName(parameter) {
+    return axios({
+        url: api.updateUserByName,
         method: 'post',
         data: parameter
     })

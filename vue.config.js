@@ -94,7 +94,7 @@ const vueConfig = {
                         'border-radius-base': '2px', // 组件/浮层圆角
                         'border-color-base': '#d9d9d9', // 边框色
                         'autoHideHeader': true,
-                        'fixedHeader': true
+                        'fixedHeader': true,
                     },
 // DO NOT REMOVE THIS LINE
                 javascriptEnabled: true

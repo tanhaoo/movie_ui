@@ -1,7 +1,7 @@
 <template>
-    <result class="a" :isSuccess="true" :content="false" :title="email" :description="description">
+    <result class="a" :isSuccess="true" :content="false" :title="userName" :description="description">
         <template slot="action">
-            <a-button size="large" type="primary">查看用户个人信息</a-button>
+            <a-button size="large" type="primary" @click="toLogin">前往登陆</a-button>
             <a-button size="large" style="margin-left: 8px" @click="goHomeHandle">返回主页</a-button>
         </template>
     </result>
@@ -22,8 +22,8 @@ export default {
         }
     },
     computed: {
-        email() {
-            const v = (this.form && this.form.email) || 'xxx'
+        userName() {
+            const v = (this.form && this.form.userName) || 'xxx'
             const title = `你的账户：${v} 注册成功`
             return title
         }
@@ -32,8 +32,11 @@ export default {
         this.form = this.$route.params
     },
     methods: {
-        goHomeHandle() {
+        toLogin() {
             this.$router.push({name: 'login'})
+        },
+        goHomeHandle() {
+            this.$router.push({name: 'index'})
         }
     }
 }

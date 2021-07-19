@@ -37,12 +37,12 @@
             item-layout="horizontal"
             :data-source="showData"
         >
-            <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item style="width: 800px;" slot="renderItem" slot-scope="item, index">
                 <a slot="actions" @click="removeData(item)">
                     <a-icon style="font-size: 20px" type="delete"/>
                 </a>
                 <a-list-item-meta
-                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                    :description="item.introduce"
                 >
                     <a style="font-size: 23px" slot="title">{{ item.movieName }}</a>
                     <a-avatar

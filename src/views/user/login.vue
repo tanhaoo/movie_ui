@@ -44,14 +44,7 @@
                 </a-tab-pane>
             </a-tabs>
 
-            <a-form-item>
-                <router-link
-                    :to="{ name: 'recover', params: { user: 'aaa'} }"
-                    class="forge-password"
-                    style="float: right;"
-                >忘记密码
-                </router-link>
-            </a-form-item>
+
             <a-form-item style="margin-top:24px">
                 <a-button
                     size="large"
@@ -86,7 +79,7 @@ import md5 from 'md5'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import {mapActions} from 'vuex'
 import {timeFix} from '@/utils/util'
-import {getSmsCaptcha, get2step, } from '@/api/login'
+import {getSmsCaptcha, get2step, } from '@/api/user'
 
 const QS = require('qs')
 

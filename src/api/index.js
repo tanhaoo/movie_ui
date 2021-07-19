@@ -1,15 +1,13 @@
 const api = {
     Login: '/user/login',
     logout: '/user/logout',
+    uploadImage: '/user/uploadImage',
     ForgePassword: '/auth/forge-password',
-    Register: '/auth/register',
+    register: '/user/register',
     twoStepCode: '/user/2step-code',
-    SendSms: '/account/sms',
-    SendSmsErr: '/account/sms_err',
     // get my info
     userInfo: '/user/info',
-    // property-add
-    oneStep: '/oneStep',
+    updateUserByName: '/user/updateUserByName',
     getMovieByPages: '/movie/getMovieByPages',
     getCurrentRatePeople: '/movie/getCurrentRatePeople',
     getMovieBySelectStatus: '/movie/getMovieBySelectStatus',
@@ -26,6 +24,7 @@ const api = {
     updateMovieList: '/movieList/updateMovieList',
     deleteMovieList: '/movieList/deleteMovieList',
     getMovieListNameByUserId: '/movieList/getMovieListNameByUserId',
-    insertMovieToList: '/movieList/insertMovieToList'
+    insertMovieToList: '/movieList/insertMovieToList',
+    removeMovieFromList: '/movieList/removeMovieFromList'
 }
 export default api

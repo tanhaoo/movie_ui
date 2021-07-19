@@ -138,3 +138,11 @@ export function insertMovieToList(parameter) {
         data: parameter
     })
 }
+
+export function removeMovieFromList(parameter) {
+    return axios({
+        url: api.removeMovieFromList,
+        method: 'post',
+        data: parameter
+    })
+}

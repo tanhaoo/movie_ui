@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import {login, getInfo, logout} from '@/api/login'
+import {login, getInfo, logout} from '@/api/user'
 import {ACCESS_TOKEN} from '@/store/mutation-types'
 import {welcome} from '@/utils/util'
 
@@ -33,7 +33,13 @@ const user = {
         },
         SET_UID: (state, id) => {
             state.uid = id
-        }
+        },
+        SET_PHONE: (state, phone) => {
+            state.phone = phone
+        },
+        SET_SEX: (state, sex) => {
+            state.sex = sex
+        },
     },
 
     actions: {
@@ -48,6 +54,8 @@ const user = {
                         Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
                         commit('SET_TOKEN', result.token)
                         commit('SET_UID', result.id)
+                        commit('SET_PHONE', result.phone)
+                        commit('SET_SEX', result.sex)
                         resolve()
                     })
                     .catch(error => {

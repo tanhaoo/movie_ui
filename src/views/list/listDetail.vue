@@ -64,11 +64,14 @@
                              @click="toDetail(item.id)"/>
                         <div style="width: 200px;height: 30px;background-color: #032541;">
                             <a-row>
-                                <a-col :span="14" style="margin-top: 5px">
+                                <a-col :span="10" style="margin-top: 5px">
                                     <a style="margin-left:10px;font-size: 15px">{{ index + 1 }}</a>
                                 </a-col>
-                                <a-col :span="10" style="margin-top: 5px">
-                                    <a :style="item.spanStyle" @click="changeMyHeart(item.id)">
+                                <a-col :span="14" style="margin-top: 5px">
+                                    <a @click="removeMovie(item.id,index)">
+                                        <a-icon type="delete" theme="filled" style="color: #1ed5a9;margin-left: 10px"/>
+                                    </a>
+                                    <a :style="item.spanStyle" style="margin-left: 10px" @click="changeMyHeart(item.id)">
                                         <a-icon type="heart" theme="filled"/>
                                         {{ item.listName }}
                                     </a>
@@ -89,7 +92,13 @@
 
 <script>
 import {mapGetters} from "vuex";
-import {deleteMovieList, getMovieListByUserId, InsertDelMovieList, updateMovieList} from "@/api/film";
+import {
+    deleteMovieList,
+    getMovieListByUserId,
+    InsertDelMovieList,
+    removeMovieFromList,
+    updateMovieList
+} from "@/api/film";
 import Vue from 'vue'
 import {ACCESS_TOKEN} from "@/store/mutation-types";
 
@@ -146,6 +155,43 @@ export default {
             title: ''
         }
     }, methods: {
+        removeMovie(id, index) {
+            console.log(id)
+            console.log(this.movieList)
+            let self = this
+            this.$confirm({
+                title: '确定移除当前电影列表中的该电影吗？',
+                content: '移除操作不可撤销！',
+                onOk() {
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve()
+                        }, 1000)
+                    }).then(() => {
+                        removeMovieFromList({
+                            userId: self.movieList.userId,
+                            movieId: id,
+                            listName: self.movieList.listName
+                        }).then(res => {
+                                let result = res.result
+                                self.filmData.splice(index, 1)
+                                self.$notification.success({
+                                    message: '成功',
+                                    description: result
+                                })
+                            }
+                        )
+                    }).catch(() => {
+                        console.log('err')
+                    })
+                    // return new Promise((resolve, reject) => {
+                    //     setTimeout(Math.random() > 0.5 ? resolve : reject, 1000);
+                    // }).catch(() => console.log('Oops errors!'));
+                },
+                onCancel() {
+                },
+            });
+        },
         showConfirm(val) {
             this.visible = true
             this.updateName = false

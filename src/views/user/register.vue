@@ -11,7 +11,7 @@
                             size="large"
                             type="text"
                             placeholder="用户名"
-                            v-decorator="['email', {rules: [{ required: true, message: '请输入用户名' }], validateTrigger: ['change', 'blur']}]"
+                            v-decorator="['userName', {rules: [{ required: true, message: '请输入用户名' }], validateTrigger: ['change', 'blur']}]"
                         ></a-input>
                     </a-form-item>
                     <a-popover
@@ -32,7 +32,7 @@
                                     :strokeColor=" passwordLevelColor "
                                 />
                                 <div style="margin-top: 10px;">
-                                    <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
+                                    <span>请不要使用容易被猜到的密码。</span>
                                 </div>
                             </div>
                         </template>
@@ -42,8 +42,8 @@
                                 type="password"
                                 @click="handlePasswordInputClick"
                                 autocomplete="false"
-                                placeholder="至少6位密码，区分大小写"
-                                v-decorator="['password', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+                                placeholder="密码"
+                                v-decorator="['password', {rules: [{ required: true, message: '密码区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
                             ></a-input>
                         </a-form-item>
                     </a-popover>
@@ -54,8 +54,16 @@
                             type="password"
                             autocomplete="false"
                             placeholder="确认密码"
-                            v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+                            v-decorator="['password2', {rules: [{ required: true, message: '密码区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
                         ></a-input>
+                    </a-form-item>
+                    <a-form-item>
+                        <a-select
+                            placeholder="请选择性别"
+                            v-decorator="['sex', {rules: [{ required: true, message: '请选择性别' }]}]">
+                            <a-select-option value="男">男</a-select-option>
+                            <a-select-option value="女">女</a-select-option>
+                        </a-select>
                     </a-form-item>
                     <a-form-item>
                         <a-button
@@ -79,7 +87,8 @@
 
 <script>
 import {mixinDevice} from '@/utils/mixin.js'
-import {getSmsCaptcha} from '@/api/login'
+import {getSmsCaptcha, register} from '@/api/user'
+import md5 from 'md5'
 
 const levelNames = {
     0: '低',
@@ -200,8 +209,14 @@ export default {
             } = this
             validateFields({force: true}, (err, values) => {
                 if (!err) {
-                    state.passwordLevelChecked = false
-                    $router.push({name: 'registerResult', params: {...values}})
+                    console.log(values)
+                    register({userName: values.userName, password: md5(values.password), sex: values.sex}).then(res => {
+                        state.passwordLevelChecked = false
+                        $router.push({name: 'registerResult', params: {...values}})
+                    }).catch(err => {
+
+                    })
+
                 }
             })
         },

@@ -10,9 +10,6 @@ import propertyAdd from './modules/property-add'
 // dynamic router permission control (Experimental)
 // import permission from './modules/async-router'
 import getters from './getters'
-import oneStep from "@/store/modules/oneStep";
-import twoStep from "@/store/modules/twoStep";
-import threeStep from "@/store/modules/threeStep";
 import movieInformation from "@/store/modules/movieInformation";
 
 Vue.use(Vuex)
@@ -23,9 +20,6 @@ export default new Vuex.Store({
         user,
         permission,
         propertyAdd,
-        oneStep,
-        twoStep,
-        threeStep,
         movieInformation
     },
     state: {},

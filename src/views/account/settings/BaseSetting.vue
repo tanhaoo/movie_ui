@@ -1,66 +1,71 @@
 <template>
-  <div class="account-settings-info-view">
-    <a-row :gutter="16">
-      <a-col :md="24" :lg="16">
-        <a-form layout="vertical">
-          <a-form-item label="昵称">
-            <a-input placeholder="给自己起个名字" />
-          </a-form-item>
-          <a-form-item label="Bio">
-            <a-textarea rows="4" placeholder="You are not alone." />
-          </a-form-item>
+    <div class="account-settings-info-view">
+        <a-row :gutter="16">
+            <a-col :md="24" :lg="16">
+                <a-form layout="vertical">
+                    <a-form-item label="昵称">
+                        <a-input v-model="userInfo.userName"></a-input>
+                    </a-form-item>
+                    <a-form-item label="手机号码">
+                        <a-input v-model="userInfo.phone" autocomplete="false"/>
+                    </a-form-item>
+                    <a-form-item label="性别" :required="false">
+                        <a-select v-model="userInfo.sex">
+                            <a-select-option value="男">男</a-select-option>
+                            <a-select-option value="女">女</a-select-option>
+                        </a-select>
+                    </a-form-item>
 
-          <a-form-item label="电子邮件" :required="false">
-            <a-input placeholder="exp@admin.com" />
-          </a-form-item>
-          <a-form-item label="加密方式" :required="false">
-            <a-select defaultValue="aes-256-cfb">
-              <a-select-option value="aes-256-cfb">aes-256-cfb</a-select-option>
-              <a-select-option value="aes-128-cfb">aes-128-cfb</a-select-option>
-              <a-select-option value="chacha20">chacha20</a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item label="连接密码" :required="false">
-            <a-input placeholder="h3gSbecd" />
-          </a-form-item>
-          <a-form-item label="登录密码" :required="false">
-            <a-input placeholder="密码" />
-          </a-form-item>
+                    <a-form-item label="修改登录密码" :required="false">
+                        <a-input placeholder="密码" type="password" v-model="pwd"/>
+                    </a-form-item>
 
-          <a-form-item>
-            <a-button type="primary">提交</a-button>
-            <a-button style="margin-left: 8px">保存</a-button>
-          </a-form-item>
-        </a-form>
-      </a-col>
-      <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
-          <a-icon type="cloud-upload-o" class="upload-icon" />
-          <div class="mask">
-            <a-icon type="plus" />
-          </div>
-          <img :src="option.img" />
-        </div>
-      </a-col>
-    </a-row>
+                    <a-form-item>
+                        <a-button :loading="loading" type="primary" @click="submit()">提交</a-button>
+                        <!--            <a-button style="margin-left: 8px">保存</a-button>-->
+                    </a-form-item>
+                </a-form>
+            </a-col>
+            <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
+                <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
+                    <a-icon type="cloud-upload-o" class="upload-icon"/>
+                    <div class="mask">
+                        <a-icon type="plus"/>
+                    </div>
+                    <img :src="avatar"/>
+                </div>
+            </a-col>
+        </a-row>
 
-    <avatar-modal ref="modal" @ok="setavatar" />
-  </div>
+        <avatar-modal ref="modal" @ok="setavatar"/>
+    </div>
 </template>
 
 <script>
 import AvatarModal from './AvatarModal'
+import {mapGetters} from "vuex";
+import {updateUserByName} from "@/api/user";
+import md5 from 'md5'
 
 export default {
     components: {
         AvatarModal
+    }, computed: {
+        ...mapGetters(['nickname', 'avatar', 'phone', 'sex'])
+    }, mounted() {
+        this.userInfo.userName = this.nickname
+        this.userInfo.phone = this.phone
+        this.userInfo.sex = this.sex
+        console.log(this.userInfo.phone)
     },
     data() {
+        const self = this
         return {
             // cropper
+            loading: false,
             preview: {},
             option: {
-                img: '/avatar2.jpg',
+                // img: '/avatar2.jpg',
                 info: true,
                 size: 1,
                 outputType: 'jpeg',
@@ -72,13 +77,36 @@ export default {
                 fixedBox: true,
                 // 开启宽度和高度比例
                 fixed: true,
-                fixedNumber: [1, 1]
-            }
+                fixedNumber: [1, 1],
+            },
+            userInfo: {
+                userName: '',
+                password: '',
+                phone: '',
+                sex: '',
+            },
+            pwd: ''
         }
     },
     methods: {
+        submit() {
+            this.userInfo.password = md5(this.pwd)
+            updateUserByName(this.userInfo).then(res => {
+                let result = res.result
+                this.loading=true
+                setTimeout(() => {
+                    this.$notification.success({
+                        message: '成功',
+                        description: result
+                    })
+                    this.loading=false
+                }, 1000)
+            }).catch(err => {
+
+            })
+        },
         setavatar(url) {
-            this.option.img = url
+            this.userInfo.img = url
         }
     }
 }
@@ -108,6 +136,7 @@ export default {
         border-radius: 50%;
         border: 1px solid rgba(0, 0, 0, 0.2);
     }
+
     .mask {
         opacity: 0;
         position: absolute;
